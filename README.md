@@ -33,11 +33,11 @@ model|TEXT|``JSON``
 
 現在のmecab設定を返します。この設定は，アプリケーション全体，つまりすべてのプロセスに対して共通です。
 
-``dicdir``: システム辞書のディレクトリパス  
+``dicdir``: システム辞書のディレクトリパス (``Path is system``)  
 ``version``: ライブラリのバージョン文字列（``0.996``）  
 ``dict[]``: 辞書情報（下記オブジェクトのコレクション）  
 
-``filename``: 辞書ファイル名  
+``filename``: 辞書ファイル名 (``Path is POSIX``)  
 ``charset``: 文字セット  
 ``size``: 登録語数  
 ``type``: ``0`` システム辞書 ``1`` ユーザー辞書 ``2`` 未知語辞書  
@@ -52,7 +52,7 @@ model|TEXT|``JSON``
 ```
 $model:=JSON Parse(MeCab Get model)
 
-$model.dicdir:=Path to object($model.dicdir;Path is POSIX).parentFolder+"jumandic"
+$model.dicdir:=Path to object($model.dicdir;Path is system).parentFolder+"jumandic"
 
 MeCab SET MODEL (JSON Stringify($model))
 ```
