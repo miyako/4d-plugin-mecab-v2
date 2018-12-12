@@ -40,7 +40,7 @@ model|TEXT|``JSON``
 辞書を切り替える例：
 
 ```
-$model:=JSON Parse(MeCab Get model )
+$model:=JSON Parse(MeCab Get model)
 
 $model.dicdir:=Path to object($model.dicdir;Path is POSIX).parentFolder+"jumandic"
 
