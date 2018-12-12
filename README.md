@@ -35,3 +35,14 @@ model|TEXT|``JSON``
 
 ``dicdir``: システム辞書のディレクトリパス
 
+プラグインのResourcesフォルダーには``UTF-8``版の``ipadic``および``jumandic``辞書が収録されています。
+
+辞書を切り替える例：
+
+```
+$model:=JSON Parse(MeCab Get model )
+
+$model.dicdir:=Path to object($model.dicdir;Path is POSIX).parentFolder+"jumandic"
+
+MeCab SET MODEL (JSON Stringify($model))
+```
