@@ -70,3 +70,24 @@ model|TEXT|``JSON``
 
 * ``userdic``は文字列またはコレクション
 
+```
+result:=MeCab (sentence)
+```
+
+Parameter|Type|Description
+------------|------------|----
+sentence|TEXT|sentence
+result|TEXT|``JSON``
+
+形態素分析の結果を返します。
+
+``nodes``: 形態素（下記オブジェクトのコレクション）
+
+``feature``: コーパス  
+``value``: 文字列  
+``rcAttr``: 右文脈  
+``lcAttr``: 左文脈  
+``posid``: 形態素  
+``char_type``: 文字種  
+``stat``: 形態素種類  
+``isbest``: 最適パス (``true`` ``false``)  
