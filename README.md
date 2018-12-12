@@ -56,3 +56,17 @@ $model.dicdir:=Path to object($model.dicdir;Path is system).parentFolder+"jumand
 
 MeCab SET MODEL (JSON Stringify($model))
 ```
+
+```
+MeCab SET MODEL (model)
+```
+
+Parameter|Type|Description
+------------|------------|----
+model|TEXT|``JSON``
+
+``dicdir``: システム辞書のディレクトリパス (``Path is system``)  
+``userdic[]``: ユーザー辞書のファイルパス (``Path is system``)  
+
+* ``userdic``は文字列またはコレクション
+
