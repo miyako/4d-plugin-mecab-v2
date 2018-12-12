@@ -21,4 +21,17 @@ use [carbon] branch for 32-bit support
 
 [1.0]
 
+## Syntax
+
+```
+model:=MeCab Get model
+```
+
+Parameter|Type|Description
+------------|------------|----
+model|TEXT|``JSON``
+
+現在のmecab設定を返します。この設定は，アプリケーション全体，つまりすべてのプロセスに対して共通です。
+
+``dicdir``: システム辞書のディレクトリパス
 
