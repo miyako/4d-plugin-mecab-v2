@@ -95,7 +95,7 @@ result|TEXT|``JSON``
 ```
 $sentence:="太郎は次郎が持っている本を花子に渡した。"
 
-$result:=JSON Parse(MeCab ($sentence);Is collection)
+$result:=JSON Parse(MeCab($sentence);Is collection)
 $words:=$result.extract("value")
 ```
 
