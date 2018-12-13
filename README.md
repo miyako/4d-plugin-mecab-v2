@@ -89,3 +89,13 @@ result|TEXT|``JSON``
 ``char_type``: 文字種  
 ``stat``: 形態素種類  
 ``isbest``: 最適パス (``true`` ``false``)  
+
+形態素の配列を取り出す例：
+
+```
+$sentence:="太郎は次郎が持っている本を花子に渡した。"
+
+$result:=JSON Parse(MeCab ($sentence);Is collection)
+$words:=$result.extract("value")
+```
+
