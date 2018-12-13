@@ -79,9 +79,7 @@ Parameter|Type|Description
 sentence|TEXT|sentence
 result|TEXT|``JSON``
 
-形態素分析の結果を返します。
-
-``nodes``: 形態素（下記オブジェクトのコレクション）
+形態素分析の結果を返します。（下記オブジェクトのコレクション）
 
 ``feature``: コーパス  
 ``value``: 文字列  
