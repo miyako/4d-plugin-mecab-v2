@@ -45,9 +45,11 @@ model|TEXT|``JSON``
 
 プラグインのResourcesフォルダーには``UTF-8``版の``ipadic``および``jumandic``辞書が収録されています。
 
-辞書を切り替える例：
+### 辞書
 
 ```
+  //辞書を切り替える例
+  
 $model:=JSON Parse(MeCab Get model)
 
 $model.dicdir:=Path to object($model.dicdir;Path is system).parentFolder+"jumandic"
@@ -152,5 +154,25 @@ MeCab SET MODEL (JSON Stringify($model))
 $model:=JSON Parse(MeCab Get model )
 ```
 
-<img width="924" alt="2018-12-17 10 00 59" src="https://user-images.githubusercontent.com/1725068/50061348-ce7c4c80-01e2-11e9-9443-8f29f0ffee17.png">
+<img width="800" alt="2018-12-17 10 00 59" src="https://user-images.githubusercontent.com/1725068/50061348-ce7c4c80-01e2-11e9-9443-8f29f0ffee17.png">
+
+### N-best
+
+```
+$sentence:="ははははははと笑った"
+
+C_OBJECT($options)
+$options:=New object("nbest";2;"theta";0.5)
+
+$results:=JSON Parse(MeCab ($sentence;JSON Stringify($options));Is collection)
+
+C_COLLECTION($result;$words)
+$words:=New collection()
+
+For each ($result;$results)
+	$words.push($result.extract("value"))
+End for each 
+```
+
+<img width="800" alt="2018-12-17 11 30 13" src="https://user-images.githubusercontent.com/1725068/50063356-64b66f80-01ef-11e9-901f-a07ebd8c17b5.png">
 
