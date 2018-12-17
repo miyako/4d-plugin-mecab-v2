@@ -190,7 +190,7 @@ End for each
 ``options.configCharset``: 設定ファイルの文字コード（既定：``EUC-JP``）  
 ``options.dictionaryCharset``: 入力CSVファイルの文字コード（既定：``EUC-JP``）  
 
-/出力ファイルの文字コードはUTF-8固定です。
+出力ファイルの文字コードはUTF-8固定です。
 
 ``options.buildUnknown``: ``unk.dic``を出力（既定：``false``）  
 ``options.buildMatrix``: ``matrix.bin``を出力（既定：``false``）  
