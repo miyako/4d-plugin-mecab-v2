@@ -79,13 +79,13 @@ result|TEXT|``JSON``
 
 形態素分析の結果を返します。（下記オブジェクトのコレクション）
 
-``feature``: コーパス  
-``value``: 文字列  
-``rcAttr``: 右文脈  
-``lcAttr``: 左文脈  
-``posid``: 形態素  
-``char_type``: 文字種  
-``stat``: 形態素種類  
+``feature``: 品詞,品詞細分類1,品詞細分類2,品詞細分類3,活用形,活用型,原形,読み,発音  
+``value``: 表層形  
+``rcAttr``: 右文脈ID  
+``lcAttr``: 左文脈ID  
+``posid``: 形態素ID  
+``char_type``: 文字種ID  
+``stat``: 形態素種類ID  
 ``isbest``: 最適パス (``true`` ``false``)  
 
 形態素の配列を取り出す例：
