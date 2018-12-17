@@ -126,7 +126,7 @@ End for each
 
 ``options.outdir``: 出力フォルダーパス  
 ``options.sysdicdir``: 入力フォルダーパス（CSVファイルの場所）  
-``options.dicdir``: 設定ファイル  
+``options.dicdir``: 設定フォルダーパス    
 
 * 任意プロパティ
 
@@ -149,7 +149,7 @@ End for each
 
 ``options.userdic``: 出力ファイルパス  
 ``options.userdicdir``: 入力フォルダーパス（CSVファイルの場所）  
-``options.dicdir``: 設定ファイル  
+``options.dicdir``: 設定フォルダーパス    
 
 * 任意プロパティ
 
