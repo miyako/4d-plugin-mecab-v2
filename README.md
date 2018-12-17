@@ -153,9 +153,28 @@ End for each
 
 * 任意プロパティ
 
-``options.assignUserDictionaryCosts``: （``feature.def``, ``char.bin``, ``model.bin``ファイルが``dicdir``に無ければ失敗）  
+``options.assignUserDictionaryCosts``: 自動コスト計算で``.csv``を出力（既定：``false``）   
 
-``matrix.bin``または``matrix.def``ファイルを``dicdir``に用意しておくこと
+* ``dicdir``に用意しておくもの（``assignUserDictionaryCosts=false``の場合）
+
+``matrix.bin``または``matrix.def``  
+``dicrc``  
+``pos-id.def``  
+``left-id.def``  
+``right-id.def``  
+``rewrite.def``  
+
+* ``dicdir``に用意しておくもの（``assignUserDictionaryCosts=true``の場合）
+
+``matrix.bin``または``matrix.def``  
+``dicrc``  
+``pos-id.def``  
+``left-id.def``  
+``right-id.def``  
+``rewrite.def``  
+``feature.def``  
+``char.bin``  
+``model.bin``  
 
 ## ユーザー辞書を作成するには（自動コスト計算）
 
