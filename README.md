@@ -153,6 +153,90 @@ End for each
 
  ``model.bin``を出力する場合，辞書の文字コード（``dictionaryCharset``）は出力ファイルの文字コード（``utf8``）と合致していなければなりません。
  
+```
+  //システム辞書を作成する例（ipadic）
+
+  //作業フォルダーを用意
+$dictPath:=System folder(Desktop)+"ipadic-sys"+Folder separator
+DELETE FOLDER($dictPath;Delete with contents)
+CREATE FOLDER($dictPath;*)
+
+  //辞書データの設定
+C_OBJECT($options)
+$options:=New object
+
+  //出力SYS.DICフォルダーパス
+$options.outdir:=$dictPath
+
+  //入力CSVファイルのフォルダーパス
+$options.sysdicdir:=System folder(Desktop)+"mecab-ipadic"+Folder separator
+
+  //設定ファイル（dicrc,matrix.bin,pos-id.def,rewrite.def,left-id.def,right-id.def）の場所
+$options.dicdir:=Get 4D folder(Current resources folder)+"ipadic"
+$options.configCharset:="EUC-JP"  //設定ファイルの文字コード（ipaはEUC-JP）
+$options.dictionaryCharset:="EUC-JP"  //入力CSVファイルの文字コード（ipaはEUC-JP）
+
+  //出力DICファイルの文字コードはUTF-8固定
+
+$options.matrix:=$options.sysdicdir+"matrix.def"  //not matrix.bin
+$options.char:=$options.sysdicdir+"char.def"  //not char.bin
+$options.unk:=$options.sysdicdir+"unk.def"
+$options.model:=$options.sysdicdir+"model.def"  //not model.bin
+
+$options.buildUnknown:=True
+$options.buildMatrix:=True
+$options.buildCharCategory:=True
+$options.buildModel:=False  //ipadicのmodelはどこにあるのだろう
+$options.buildSysdic:=True
+
+  //辞書ファイルのコンパイル
+
+$method:="mecab_progress"
+MeCab INDEX DICTIONARY (JSON Stringify($options);$method)
+```
+ 
+```
+  //システム辞書を作成する例（jumandic）
+
+  //作業フォルダーを用意
+$dictPath:=System folder(Desktop)+"jumandic-sys"+Folder separator
+DELETE FOLDER($dictPath;Delete with contents)
+CREATE FOLDER($dictPath;*)
+
+  //辞書データの設定
+C_OBJECT($options)
+$options:=New object
+
+  //出力SYS.DICフォルダーパス
+$options.outdir:=$dictPath
+
+  //入力CSVファイルのフォルダーパス
+$options.sysdicdir:=System folder(Desktop)+"mecab-jumandic"+Folder separator
+
+  //設定ファイル（dicrc,matrix.bin,pos-id.def,rewrite.def,left-id.def,right-id.def）の場所
+$options.dicdir:=Get 4D folder(Current resources folder)+"jumandic"
+$options.configCharset:="UTF-8"  //設定ファイルの文字コード（jumanはUTF-8）
+$options.dictionaryCharset:="UTF-8"  //入力CSVファイルの文字コード（jumanはUTF-8）
+
+  //出力DICファイルの文字コードはUTF-8固定
+
+$options.matrix:=$options.sysdicdir+"matrix.def"//not matrix.bin
+$options.char:=$options.sysdicdir+"char.def"  //not char.bin
+$options.unk:=$options.sysdicdir+"unk.def"
+$options.model:=$options.sysdicdir+"model.def" //not model.bin
+
+$options.buildUnknown:=True
+$options.buildMatrix:=True
+$options.buildCharCategory:=True
+$options.buildModel:=True 
+$options.buildSysdic:=True
+
+  //辞書ファイルのコンパイル
+
+$method:="mecab_progress"
+MeCab INDEX DICTIONARY (JSON Stringify($options);$method)
+```
+ 
 ## ユーザー辞書を作成するには
 
 * 必須プロパティ
@@ -228,6 +312,10 @@ $options.dictionaryCharset:="UTF-8"  //入力CSVファイルの文字コード
   //出力DICファイルの文字コードはUTF-8固定
 
 $options.assignUserDictionaryCosts:=True
+$options.rewrite:=$options.dicdir+Folder separator+"rewrite.def"
+$options.feature:=$options.dicdir+Folder separator+"feature.def"
+$options.char:=$options.dicdir+Folder separator+"char.bin"
+$options.model:=$options.dicdir+Folder separator+"model.bin"
 
   //コストの自動計算
 $method:="mecab_progress"
@@ -236,7 +324,7 @@ MeCab INDEX DICTIONARY (JSON Stringify($options);$method)
 MOVE DOCUMENT($dictPath+"data.csv";$dictPath+"data.txt")
 MOVE DOCUMENT($options.userdic;$dictPath+"data.csv")
 
-$options.assignUserDictionaryCosts:=False
+$options.assignUserDictionaryCosts:=True
 $options.userdic:=$dictPath+"data.dic"
 
   //辞書ファイルの作成
@@ -295,6 +383,7 @@ $options.dictionaryCharset:="UTF-8"  //入力CSVファイルの文字コード
   //出力DICファイルの文字コードはUTF-8固定
 
 $options.assignUserDictionaryCosts:=False
+$options.rewrite:=$options.dicdir+Folder separator+"rewrite.def"
 
   //辞書ファイルのコンパイル
 $method:="mecab_progress"
