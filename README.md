@@ -208,4 +208,4 @@ End for each
 
 * 任意プロパティ
 
-``options.assignUserDictionaryCosts``: （``model``ファイルが必要です）  
+``options.assignUserDictionaryCosts``: （``feature.def``ファイルが``dicdir``に無ければ無視）  
