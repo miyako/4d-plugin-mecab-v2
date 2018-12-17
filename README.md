@@ -181,19 +181,19 @@ End for each
 
 * 必須プロパティ
 
-``options.outdir``: 出力フォルダーパス
-``options.sysdicdir``: 入力フォルダーパス（CSVファイルの場所）
-``options.dicdir``: 設定ファイル
+``options.outdir``: 出力フォルダーパス  
+``options.sysdicdir``: 入力フォルダーパス（CSVファイルの場所）  
+``options.dicdir``: 設定ファイル  
 
 * 任意プロパティ
 
-``options.configCharset``: 設定ファイルの文字コード（既定：``EUC-JP``）
-``options.dictionaryCharset``: 入力CSVファイルの文字コード（既定：``EUC-JP``）
+``options.configCharset``: 設定ファイルの文字コード（既定：``EUC-JP``）  
+``options.dictionaryCharset``: 入力CSVファイルの文字コード（既定：``EUC-JP``）  
 
 /出力ファイルの文字コードはUTF-8固定です。
 
-``options.buildUnknown``: ``unk.dic``を出力（既定：``false``）
-``options.buildMatrix``: ``matrix.bin``を出力（既定：``false``）
-``options.buildCharCategory``: ``char.bin``を出力（既定：``false``）
-``options.buildSysdic``: ``sys.dic``を出力（既定：``true``）
-``options.buildModel``: ``model.bin``を出力（既定：``false``; ``model.def``が``dicdir``に無ければ無視）
+``options.buildUnknown``: ``unk.dic``を出力（既定：``false``）  
+``options.buildMatrix``: ``matrix.bin``を出力（既定：``false``）  
+``options.buildCharCategory``: ``char.bin``を出力（既定：``false``）  
+``options.buildSysdic``: ``sys.dic``を出力（既定：``true``）   
+``options.buildModel``: ``model.bin``を出力（既定：``false``; ``model.def``が``dicdir``に無ければ無視）  
