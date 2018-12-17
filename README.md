@@ -153,7 +153,9 @@ End for each
 
 * 任意プロパティ
 
-``options.assignUserDictionaryCosts``: （``feature.def``ファイルが``dicdir``に無ければ無視）  
+``options.assignUserDictionaryCosts``: （``feature.def``, ``char.bin``, ``model.bin``ファイルが``dicdir``に無ければ失敗）  
+
+``matrix.bin``または``matrix.def``ファイルを``dicdir``に用意しておくこと
 
 ## ユーザー辞書を作成するには（自動コスト計算）
 
