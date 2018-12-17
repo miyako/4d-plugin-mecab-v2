@@ -197,3 +197,15 @@ End for each
 ``options.buildCharCategory``: ``char.bin``を出力（既定：``false``）  
 ``options.buildSysdic``: ``sys.dic``を出力（既定：``true``）   
 ``options.buildModel``: ``model.bin``を出力（既定：``false``; ``model.def``が``dicdir``に無ければ無視）  
+
+## ユーザー辞書を作成するには
+
+* 必須プロパティ
+
+``options.userdic``: 出力ファイルパス
+``options.userdicdir``: 入力フォルダーパス（CSVファイルの場所）
+``options.dicdir``: 設定ファイル
+
+* 任意プロパティ
+
+``options.assignUserDictionaryCosts``: （``model``ファイルが必要です）
