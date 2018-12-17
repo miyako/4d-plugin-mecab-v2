@@ -198,6 +198,8 @@ End for each
 ``options.buildSysdic``: ``sys.dic``を出力（既定：``true``）   
 ``options.buildModel``: ``model.bin``を出力（既定：``false``; ``model.def``が``dicdir``に無ければ無視）  
 
+ ``model.bin``を出力する場合，辞書の文字コード（``dictionaryCharset``）は出力ファイルの文字コード（``utf8``）と合致していなければなりません。
+ 
 ## ユーザー辞書を作成するには
 
 * 必須プロパティ
