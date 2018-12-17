@@ -1,0 +1,5 @@
+/* Localized versions of Info.plist keys */
+
+CFBundleName = "MeCab";
+CFBundleShortVersionString = "2.0";
+CFBundleGetInfoString = "MeCab version 2.0, Copyright 2018 miyako.";
