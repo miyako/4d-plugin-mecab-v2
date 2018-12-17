@@ -64,9 +64,9 @@ Parameter|Type|Description
 model|TEXT|``JSON``
 
 ``dicdir``: システム辞書のディレクトリパス (``Path is system``)  
-``userdic[]``: ユーザー辞書のファイルパス (``Path is system``)  
+``userdic[]`` or ``userdic``: ユーザー辞書のファイルパス (``Path is system``)  
 
-* ``userdic``は文字列またはコレクション
+* ``userdic``には文字列または文字列のコレクションが渡せます。
 
 ```
 result:=MeCab (sentence)
