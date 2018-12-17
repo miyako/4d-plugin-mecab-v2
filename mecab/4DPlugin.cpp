@@ -829,7 +829,9 @@ bool compile_matrix(const char *ifile,
     
     C_TEXT *Param2_callback = (C_TEXT *)progress_ctx->callback_method;
     
-    std::ifstream ifs(WPATH(ifile));/* matrix.def */
+    std::string matrix_def = ifile;
+    
+    std::ifstream ifs(WPATH(matrix_def));/* matrix.def */
     std::istringstream iss(MATRIX_DEF_DEFAULT);
     std::istream *is = &ifs;
     
@@ -838,7 +840,7 @@ bool compile_matrix(const char *ifile,
         if(STDERR_DEBUG_INFO)
         {
             std::cerr
-            << ifile
+            << ((matrix_def.length() == 0) ? "matrix.def" : matrix_def)
             << " is not found. minimum setting is used."
             << std::endl;
         }
@@ -977,26 +979,32 @@ bool compile_char_property(const char *cfile,
     
     C_TEXT *Param2_callback = (C_TEXT *)progress_ctx->callback_method;
     
+    std::string char_def = cfile;
+    std::string unk_def = ufile;
+    
     scoped_fixed_array<char, BUF_SIZE> line;
     scoped_fixed_array<char *, 512> col;
     size_t id = 0;
     std::vector<Range> range;
     std::map<std::string, CharInfo> category;
     std::vector<std::string> category_ary;
-    std::ifstream ifs(WPATH(cfile));
+    
+    std::ifstream ifs(WPATH(char_def));
     std::istringstream iss(CHAR_PROPERTY_DEF_DEFAULT);
     std::istream *is = &ifs;
     
-    if(!ifs)
+    if (!ifs)
     {
-        std::string message = cfile;
-        callback(Param2_callback,
-                 callback_event_error_open_file,
-                 message, 0, 0);
-        
-        return false;
+        if(STDERR_DEBUG_INFO)
+        {
+            std::cerr
+            << ((char_def.length() == 0) ? "char.def" : char_def)
+            << " is not found. minimum setting is used."
+            << std::endl;
+        }
+        is = &iss;
     }
-    
+
     while (is->getline(line.get(), line.size())) {
         if (std::strlen(line.get()) == 0 || line[0] == '#') {
             continue;
@@ -1005,7 +1013,7 @@ bool compile_char_property(const char *cfile,
         
         if(size < 2)
         {
-            std::string message = cfile;
+            std::string message = char_def;
             callback(Param2_callback,
                      callback_event_error_invalid_def_file,
                      message, 0, 0);
@@ -1046,7 +1054,7 @@ bool compile_char_property(const char *cfile,
                     
                     if(category.find(std::string(col[i]))  == category.end())
                     {
-                        std::string message = cfile;
+                        std::string message = char_def;
                         callback(Param2_callback,
                                  callback_event_error_invalid_def_file,
                                  message, 0, 0);
@@ -1064,7 +1072,7 @@ bool compile_char_property(const char *cfile,
                 range.push_back(r);
             }else
             {
-                std::string message = cfile;
+                std::string message = char_def;
                 callback(Param2_callback,
                          callback_event_error_invalid_def_file,
                          message, 0, 0);
@@ -1081,7 +1089,7 @@ bool compile_char_property(const char *cfile,
             
             if(size < 4)
             {
-                std::string message = cfile;
+                std::string message = char_def;
                 callback(Param2_callback,
                          callback_event_error_invalid_def_file,
                          message, 0, 0);
@@ -1098,7 +1106,7 @@ bool compile_char_property(const char *cfile,
             
             if(category.find(key) != category.end())
             {
-                std::string message = cfile;
+                std::string message = char_def;
                 callback(Param2_callback,
                          callback_event_error_invalid_def_file,
                          message, 0, 0);
@@ -1125,7 +1133,7 @@ bool compile_char_property(const char *cfile,
     
     if(category.size() >= 18)
     {
-        std::string message = cfile;
+        std::string message = char_def;
         callback(Param2_callback,
                  callback_event_error_invalid_def_file,
                  message, 0, 0);
@@ -1140,7 +1148,7 @@ bool compile_char_property(const char *cfile,
         
     if(category.find("DEFAULT") == category.end())
     {
-        std::string message = cfile;
+        std::string message = char_def;
         callback(Param2_callback,
                  callback_event_error_invalid_def_file,
                  message, 0, 0);
@@ -1155,7 +1163,7 @@ bool compile_char_property(const char *cfile,
  
     if(category.find("SPACE") == category.end())
     {
-        std::string message = cfile;
+        std::string message = char_def;
         callback(Param2_callback,
                  callback_event_error_invalid_def_file,
                  message, 0, 0);
@@ -1169,17 +1177,19 @@ bool compile_char_property(const char *cfile,
     }
 
     std::istringstream iss2(UNK_DEF_DEFAULT);
-    std::ifstream ifs2(WPATH(ufile));
+    std::ifstream ifs2(WPATH(unk_def));
     std::istream *is2 = &ifs2;
     
-    if (!ifs2) {
-        
+    if (!ifs2)
+    {
         if(STDERR_DEBUG_INFO)
         {
-            std::cerr << ufile
-            << " is not found. minimum setting is used." << std::endl;
-            is2 = &iss2;
+            std::cerr
+            << ((unk_def.length() == 0) ? "unk.def" : unk_def)
+            << " is not found. minimum setting is used."
+            << std::endl;
         }
+        is2 = &iss2;
     }
     
     std::set<std::string> unk;
@@ -1189,7 +1199,7 @@ bool compile_char_property(const char *cfile,
         
         if(n < 1)
         {
-            std::string message = cfile;
+            std::string message = char_def;
             callback(Param2_callback,
                      callback_event_error_invalid_def_file,
                      message, 0, 0);
@@ -1206,14 +1216,14 @@ bool compile_char_property(const char *cfile,
         
         if(category.find(key) == category.end())
         {
-            std::string message = cfile;
+            std::string message = char_def;
             callback(Param2_callback,
                      callback_event_error_invalid_def_file,
                      message, 0, 0);
             
             if(STDERR_DEBUG_INFO)
             {
-                std::cerr << "category [" << key << "] is undefined in " << cfile << std::endl;
+                std::cerr << "category [" << key << "] is undefined in " << char_def << std::endl;
             }
             
             return false;
@@ -1229,14 +1239,14 @@ bool compile_char_property(const char *cfile,
         
         if(unk.find(it->first) == unk.end())
         {
-            std::string message = cfile;
+            std::string message = char_def;
             callback(Param2_callback,
                      callback_event_error_invalid_def_file,
                      message, 0, 0);
             
             if(STDERR_DEBUG_INFO)
             {
-                std::cerr << "category [" << it->first << "] is undefined in " << ufile << std::endl;
+                std::cerr << "category [" << it->first << "] is undefined in " << unk_def << std::endl;
             }
             
             return false;
@@ -1261,34 +1271,32 @@ bool compile_char_property(const char *cfile,
     }
     
     // output binary table
+    std::ofstream ofs(WPATH(ofile), std::ios::binary|std::ios::out);
+    
+    if(!ofs)
     {
-        std::ofstream ofs(WPATH(ofile), std::ios::binary|std::ios::out);
+        std::string message = ofile;
+        callback(Param2_callback,
+                 callback_event_error_create_file,
+                 message, 0, 0);
         
-        if(!ofs)
-        {
-            std::string message = ofile;
-            callback(Param2_callback,
-                     callback_event_error_create_file,
-                     message, 0, 0);
-            
-            return false;
-        }
-        
-        unsigned int size = static_cast<unsigned int>(category.size());
-        ofs.write(reinterpret_cast<const char*>(&size), sizeof(size));
-        for (std::vector<std::string>::const_iterator it = category_ary.begin();
-             it != category_ary.end();
-             ++it) {
-            char buf[32];
-            std::fill(buf, buf + sizeof(buf), '\0');
-            std::strncpy(buf, it->c_str(), sizeof(buf) - 1);
-            ofs.write(reinterpret_cast<const char*>(buf), sizeof(buf));
-        }
-        ofs.write(reinterpret_cast<const char*>(&table[0]),
-                  sizeof(CharInfo) * table.size());
-        ofs.close();
+        return false;
     }
     
+    unsigned int size = static_cast<unsigned int>(category.size());
+    ofs.write(reinterpret_cast<const char*>(&size), sizeof(size));
+    for (std::vector<std::string>::const_iterator it = category_ary.begin();
+         it != category_ary.end();
+         ++it) {
+        char buf[32];
+        std::fill(buf, buf + sizeof(buf), '\0');
+        std::strncpy(buf, it->c_str(), sizeof(buf) - 1);
+        ofs.write(reinterpret_cast<const char*>(buf), sizeof(buf));
+    }
+    ofs.write(reinterpret_cast<const char*>(&table[0]),
+              sizeof(CharInfo) * table.size());
+    ofs.close();
+
     return true;
 }
 
@@ -1489,8 +1497,12 @@ bool compile_dictionary(const MeCab::Param &param,
     const std::string matrix_bin_file = DCONF(MATRIX_FILE);
     const std::string left_id_file    = DCONF(LEFT_ID_FILE);
     const std::string right_id_file   = DCONF(RIGHT_ID_FILE);
-    const std::string rewrite_file    = DCONF(REWRITE_FILE);
     const std::string pos_id_file     = DCONF(POS_ID_FILE);
+    
+    const std::string char_bin = param.get<std::string>("char");
+    const std::string feature_def = param.get<std::string>("feature");
+    const std::string model_bin = param.get<std::string>("model");
+    const std::string rewrite_def = param.get<std::string>("rewrite");
     
     std::vector<std::pair<std::string, Token*> > dic;
     
@@ -1569,7 +1581,10 @@ bool compile_dictionary(const MeCab::Param &param,
     }
 
     posid.reset(new POSIDGenerator);
-    posid->open(pos_id_file.c_str(), &config_iconv);
+    if(!posid->open(pos_id_file.c_str(), &config_iconv))
+    {
+        return false;
+    }
     
     std::istringstream iss(UNK_DEF_DEFAULT);
   
@@ -1581,9 +1596,12 @@ bool compile_dictionary(const MeCab::Param &param,
         if (!ifs) {
             if (type == MECAB_UNK_DIC) {
                 
+                std::string unk_def = dics[i];
+                
                 if(STDERR_DEBUG_INFO)
                 {
-                    std::cerr << dics[i]
+                    std::cerr
+                    << ((unk_def.length() == 0) ? "unk.def" : unk_def)
                     << " is not found. minimum setting is used." << std::endl;
                 }
 
@@ -1652,27 +1670,37 @@ bool compile_dictionary(const MeCab::Param &param,
                 if (!rewrite.get())
                 {
                     rewrite.reset(new DictionaryRewriter);
-                    rewrite->open(rewrite_file.c_str(), &config_iconv);
+
+                    if (!MeCab::file_exists(rewrite_def.c_str()))
+                    {
+                        std::string message = rewrite_def;
+                        callback(Param2_callback,
+                                 callback_event_error_missing_file,
+                                 message, 0, 0);
+                        
+                        return false;
+                    }
+                    
+                    if(!rewrite->open(rewrite_def.c_str(), &config_iconv))
+                    {
+                        return false;
+                    }
+
                     fi.reset(new DecoderFeatureIndex);
                     
-                    const std::string modelfile = param.get<std::string>("model");
-                    if(modelfile.length())
+                    if(!model_bin.length())
                     {
-                        if (MeCab::file_exists(DCONF(modelfile)))
-                        {
-                            if(!fi->open(param))
-                            {
-                                std::string message = modelfile;
-                                callback(Param2_callback,
-                                         callback_event_error_open_file,
-                                         message, 0, 0);
-                                
-                                return false;
-                            }
-                        }
-                    }else
+                        std::string message = "model.bin";
+                        callback(Param2_callback,
+                                 callback_event_error_missing_file,
+                                 message, 0, 0);
+                        
+                        return false;
+                    }
+                    
+                    if (!MeCab::file_exists(model_bin.c_str()))
                     {
-                        std::string message = "model";
+                        std::string message = model_bin;
                         callback(Param2_callback,
                                  callback_event_error_missing_file,
                                  message, 0, 0);
@@ -1680,29 +1708,43 @@ bool compile_dictionary(const MeCab::Param &param,
                         return false;
                     }
 
+                    if(!MeCab::file_exists(feature_def.c_str()))
+                    {
+                        std::string message = feature_def;
+                        callback(Param2_callback,
+                                 callback_event_error_open_file,
+                                 message, 0, 0);
+                        
+                        return false;
+                    }
+                    
+                    if(!fi->open(param))
+                    {
+                        return false;
+                    }
+
                     property.reset(new CharProperty);
                     
-                    if (MeCab::file_exists(DCONF(CHAR_PROPERTY_FILE)))
+                    if (!MeCab::file_exists(char_bin.c_str()))
                     {
-                        if(!property->open(param))
-                        {
-                            std::string message = CHAR_PROPERTY_FILE;
-                            callback(Param2_callback,
-                                     callback_event_error_open_file,
-                                     message, 0, 0);
-                            
-                            return false;
-                        }
-                    }else
-                    {
-                        std::string message = CHAR_PROPERTY_FILE;
+                        std::string message = char_bin;
                         callback(Param2_callback,
                                  callback_event_error_missing_file,
                                  message, 0, 0);
                         
                         return false;
                     }
- 
+                    
+                    if(!property->open(param))
+                    {
+                        std::string message = CHAR_PROPERTY_FILE;
+                        callback(Param2_callback,
+                                 callback_event_error_open_file,
+                                 message, 0, 0);
+                        
+                        return false;
+                    }
+                    
                     property->set_charset(from.c_str());
                 }
                 cost = calcCost(w, feature, factor,
@@ -1712,14 +1754,28 @@ bool compile_dictionary(const MeCab::Param &param,
             if (lid < 0  || rid < 0 || lid == INT_MAX || rid == INT_MAX) {
                 if (!rewrite.get()) {
                     rewrite.reset(new DictionaryRewriter);
-                    rewrite->open(rewrite_file.c_str(), &config_iconv);
+                    
+                    if (!MeCab::file_exists(rewrite_def.c_str()))
+                    {
+                        std::string message = rewrite_def;
+                        callback(Param2_callback,
+                                 callback_event_error_missing_file,
+                                 message, 0, 0);
+                        
+                        return false;
+                    }
+                    
+                    if(!rewrite->open(rewrite_def.c_str(), &config_iconv))
+                    {
+                        return false;
+                    }
                 }
                 
                 std::string ufeature, lfeature, rfeature;
                 
                 if(!rewrite->rewrite(feature, &ufeature, &lfeature, &rfeature))
                 {
-                    std::string message = rewrite_file;
+                    std::string message = rewrite_def;
                     callback(Param2_callback,
                              callback_event_error_write_file,
                              message, 0, 0);
@@ -2066,11 +2122,15 @@ bool compile_dictionary_auto(const MeCab::Param &param,
     
     const std::string dicdir = param.get<std::string>("dicdir");
     
+    const std::string char_bin = param.get<std::string>("char");
+    const std::string feature_def = param.get<std::string>("feature");
+    const std::string model_bin = param.get<std::string>("model");
+    const std::string rewrite_def = param.get<std::string>("rewrite");
+    
     const std::string matrix_file     = DCONF(MATRIX_DEF_FILE);
     const std::string matrix_bin_file = DCONF(MATRIX_FILE);
     const std::string left_id_file    = DCONF(LEFT_ID_FILE);
     const std::string right_id_file   = DCONF(RIGHT_ID_FILE);
-    const std::string rewrite_file    = DCONF(REWRITE_FILE);
     
     const std::string from = param.get<std::string>("dictionary-charset");
     
@@ -2108,12 +2168,9 @@ bool compile_dictionary_auto(const MeCab::Param &param,
         return false;
     }
     
-    rewriter.open(rewrite_file.c_str(), &config_iconv);
-
-    const std::string modelfile = param.get<std::string>("model");
-    if(!modelfile.length())
+    if(!model_bin.length())
     {
-        std::string message = "model";
+        std::string message = "model.bin";
         callback(Param2_callback,
                  callback_event_error_missing_file,
                  message, 0, 0);
@@ -2121,9 +2178,9 @@ bool compile_dictionary_auto(const MeCab::Param &param,
         return false;
     }
     
-    if (!MeCab::file_exists(modelfile.c_str()))
+    if (!MeCab::file_exists(model_bin.c_str()))
     {
-        std::string message = modelfile;
+        std::string message = model_bin;
         callback(Param2_callback,
                  callback_event_error_missing_file,
                  message, 0, 0);
@@ -2131,9 +2188,9 @@ bool compile_dictionary_auto(const MeCab::Param &param,
         return false;
     }
     
-    if(!MeCab::file_exists(DCONF(FEATURE_FILE)))
+    if(!MeCab::file_exists(feature_def.c_str()))
     {
-        std::string message = DCONF(FEATURE_FILE);
+        std::string message = feature_def;
         callback(Param2_callback,
                  callback_event_error_open_file,
                  message, 0, 0);
@@ -2146,9 +2203,9 @@ bool compile_dictionary_auto(const MeCab::Param &param,
         return false;
     }
     
-    if (!MeCab::file_exists(DCONF(CHAR_PROPERTY_FILE)))
+    if (!MeCab::file_exists(char_bin.c_str()))
     {
-        std::string message = DCONF(CHAR_PROPERTY_FILE);
+        std::string message = char_bin;
         callback(Param2_callback,
                  callback_event_error_missing_file,
                  message, 0, 0);
@@ -2156,13 +2213,18 @@ bool compile_dictionary_auto(const MeCab::Param &param,
         return false;
     }
     
-    if (!MeCab::file_exists(rewrite_file.c_str()))
+    if (!MeCab::file_exists(rewrite_def.c_str()))
     {
-        std::string message = rewrite_file;
+        std::string message = rewrite_def;
         callback(Param2_callback,
                  callback_event_error_missing_file,
                  message, 0, 0);
         
+        return false;
+    }
+    
+    if(!rewriter.open(rewrite_def.c_str(), &config_iconv))
+    {
         return false;
     }
     
@@ -2398,7 +2460,12 @@ void MeCab_INDEX_DICTIONARY(sLONG_PTR *pResult, PackagePtr pParams)
         std::string userdic;
         std::string userdicdir;
         std::string sysdicdir;
-        std::string model;
+        std::string modeldef;
+        std::string matrixdef;
+        std::string chardef;
+        std::string unkdef;
+        std::string rewritedef;
+        std::string featuredef;
         
         std::string dictionaryCharset = "EUC-JP";
         std::string configCharset = "EUC-JP";
@@ -2454,7 +2521,50 @@ void MeCab_INDEX_DICTIONARY(sLONG_PTR *pResult, PackagePtr pParams)
             {
             if(it->isString())
             {
-            model = it->asString();
+            modeldef = it->asString();
+            }
+            }else
+            if(name == "matrix")
+            {
+            if(it->isString())
+            {
+            matrixdef = it->asString();
+            }
+            }else
+                if(name == "char")
+                {
+                    if(it->isString())
+                    {
+                        chardef = it->asString();
+                    }
+                }else
+            if(name == "unk")
+            {
+            if(it->isString())
+            {
+            unkdef = it->asString();
+            }
+            }else
+            if(name == "rewrite")
+            {
+            if(it->isString())
+            {
+            rewritedef = it->asString();
+            }
+            }else
+            if(name == "unk")
+            {
+            if(it->isString())
+            {
+            unkdef = it->asString();
+            }
+
+            }else
+            if(name == "feature")
+            {
+            if(it->isString())
+            {
+            featuredef = it->asString();
             }
             }else
             if(name == "dictionaryCharset")
@@ -2589,10 +2699,16 @@ void MeCab_INDEX_DICTIONARY(sLONG_PTR *pResult, PackagePtr pParams)
                 param.set("outdir", outdir);
                 
 #if VERSIONMAC
-                convert_userdic_to_posix(model);
+                convert_userdic_to_posix(modeldef);
+                convert_userdic_to_posix(chardef);
+                convert_userdic_to_posix(rewritedef);
+                convert_userdic_to_posix(featuredef);
 #endif
                 
-                param.set("model", model);
+                param.set("model", modeldef);
+                param.set("char", chardef);
+                param.set("rewrite", rewritedef);
+                param.set("feature", featuredef);
                 
                 /* get csv files in dicdir (full posix path, please) */
                 std::vector<std::string> dic;
@@ -2611,8 +2727,6 @@ void MeCab_INDEX_DICTIONARY(sLONG_PTR *pResult, PackagePtr pParams)
                         
                         if (assignUserDictionaryCosts)
                         {
-                            param.set("model", DCONF(MODEL_FILE));
-                            
                             if(compile_dictionary_auto(param, dic, userdic.c_str(), &ctx))
                             {
                                 std::string message = userdic.c_str();
@@ -2651,13 +2765,14 @@ void MeCab_INDEX_DICTIONARY(sLONG_PTR *pResult, PackagePtr pParams)
 #if VERSIONMAC
                         convert_dicdir_to_posix(sysdicdir);
                         convert_dicdir_to_posix(outdir);
+                        convert_userdic_to_posix(unkdef);
 #endif
                         enum_csv_dictionaries(sysdicdir, dic);
                         
-                        if (buildCharCategory || buildUnknown)
+                        if (buildCharCategory)
                         {
-                            if(compile_char_property(DCONF(CHAR_PROPERTY_DEF_FILE),
-                                                  DCONF(UNK_DEF_FILE),
+                            if(compile_char_property(chardef.c_str(),
+                                                  unkdef.c_str(),
                                                   OCONF(CHAR_PROPERTY_FILE), &ctx))
                             {
                                 std::string message = OCONF(CHAR_PROPERTY_FILE);
@@ -2672,10 +2787,11 @@ void MeCab_INDEX_DICTIONARY(sLONG_PTR *pResult, PackagePtr pParams)
                         if (buildUnknown)
                         {
                             std::vector<std::string> tmp;
-                            tmp.push_back(DCONF(UNK_DEF_FILE));
+                            tmp.push_back(unkdef);
+                            
                             param.set("type", static_cast<int>(MECAB_UNK_DIC));
                             
-                            if(compile_dictionary(param, dic, OCONF(UNK_DIC_FILE), &ctx))
+                            if(compile_dictionary(param, tmp, OCONF(UNK_DIC_FILE), &ctx))
                             {
                                 std::string message = OCONF(UNK_DIC_FILE);
                                 callback(&Param2_callback,
@@ -2688,10 +2804,10 @@ void MeCab_INDEX_DICTIONARY(sLONG_PTR *pResult, PackagePtr pParams)
                         
                         if (buildModel)
                         {
-                            if (MeCab::file_exists(DCONF(MODEL_DEF_FILE)))
+                            if (MeCab::file_exists(modeldef.c_str()))
                             {
                                 if(compile_model(param,
-                                                 DCONF(MODEL_DEF_FILE),
+                                                 modeldef.c_str(),
                                                  OCONF(MODEL_FILE), &ctx))
                                 {
                                     std::string message = OCONF(MODEL_FILE);
@@ -2704,7 +2820,9 @@ void MeCab_INDEX_DICTIONARY(sLONG_PTR *pResult, PackagePtr pParams)
                             } else {
                                 if(STDERR_DEBUG_INFO)
                                 {
-                                    std::cerr << DCONF(MODEL_DEF_FILE) << " is not found. skipped."
+                                    std::cerr
+                                    << ((modeldef.length() == 0) ? "model.def" : modeldef)
+                                    << " is not found. skipped."
                                     << std::endl;
                                 }
                             }
@@ -2740,24 +2858,18 @@ void MeCab_INDEX_DICTIONARY(sLONG_PTR *pResult, PackagePtr pParams)
                         
                         if (buildMatrix)
                         {
-                            if (MeCab::file_exists(DCONF(MATRIX_DEF_FILE)))
+#if VERSIONMAC
+                            convert_userdic_to_posix(matrixdef);
+#endif
+                            /* matrix.def is not mandatory */
+                            if(compile_matrix(matrixdef.c_str(), OCONF(MATRIX_FILE), &ctx))
                             {
-                                if(compile_matrix(DCONF(MATRIX_DEF_FILE), OCONF(MATRIX_FILE), &ctx))
-                                {
-                                    std::string message = OCONF(MATRIX_FILE);
-                                    callback(&Param2_callback,
-                                             callback_event_create_file,
-                                             message,
-                                             0,
-                                             0);
-                                }
-                            }else
-                            {
-                                if(STDERR_DEBUG_INFO)
-                                {
-                                    std::cerr << DCONF(MATRIX_DEF_FILE) << " is not found. skipped."
-                                    << std::endl;
-                                }
+                                std::string message = OCONF(MATRIX_FILE);
+                                callback(&Param2_callback,
+                                         callback_event_create_file,
+                                         message,
+                                         0,
+                                         0);
                             }
                         }
                     }
