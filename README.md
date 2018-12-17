@@ -202,10 +202,10 @@ End for each
 
 * 必須プロパティ
 
-``options.userdic``: 出力ファイルパス
-``options.userdicdir``: 入力フォルダーパス（CSVファイルの場所）
-``options.dicdir``: 設定ファイル
+``options.userdic``: 出力ファイルパス  
+``options.userdicdir``: 入力フォルダーパス（CSVファイルの場所）  
+``options.dicdir``: 設定ファイル  
 
 * 任意プロパティ
 
-``options.assignUserDictionaryCosts``: （``model``ファイルが必要です）
+``options.assignUserDictionaryCosts``: （``model``ファイルが必要です）  
