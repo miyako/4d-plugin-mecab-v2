@@ -136,7 +136,7 @@ End for each
 出力ファイルの文字コードはUTF-8固定です。
 
 ``options.buildUnknown``: ``unk.dic``を出力（既定：``false``）  
-``options.buildMatrix``: ``matrix.bin``を出力（既定：``false``）  
+``options.buildMatrix``: ``matrix.bin``を出力（既定：``false``; ``matrix.def``が``dicdir``に無ければ無視）  
 ``options.buildCharCategory``: ``char.bin``を出力（既定：``false``）  
 ``options.buildSysdic``: ``sys.dic``を出力（既定：``true``）   
 ``options.buildModel``: ``model.bin``を出力（既定：``false``; ``model.def``が``dicdir``に無ければ無視）  
