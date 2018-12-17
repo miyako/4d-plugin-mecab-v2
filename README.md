@@ -45,11 +45,9 @@ model|TEXT|``JSON``
 
 プラグインのResourcesフォルダーには``UTF-8``版の``ipadic``および``jumandic``辞書が収録されています。
 
-### 辞書
+## 辞書を切り替えるには
 
-```
-  //辞書を切り替える例
-  
+```  
 $model:=JSON Parse(MeCab Get model)
 
 $model.dicdir:=Path to object($model.dicdir;Path is system).parentFolder+"jumandic"
@@ -91,7 +89,7 @@ result|TEXT|``JSON``
 ``stat``: 形態素種類ID  
 ``isbest``: 最適パス (``true`` ``false``)  
 
-形態素の配列を取り出す例：
+## 形態素の配列を取り出すには
 
 ```
 $sentence:="太郎は次郎が持っている本を花子に渡した。"
@@ -100,66 +98,9 @@ $result:=JSON Parse(MeCab($sentence);Is collection)
 $words:=$result.extract("value")
 ```
 
-### ユーザー辞書
-
-```
-  //ユーザー辞書を作成する例
-
-  //作業フォルダーを用意
-$dictPath:=System folder(Desktop)+"test-dict"+Folder separator
-DELETE FOLDER($dictPath;Delete with contents)
-CREATE FOLDER($dictPath;*)
-
-  //CSVファイルを作成
-C_COLLECTION($data)
-$data:=New collection
-
-  //1行目は空データにする（つぎの連結コストがマイナスにならないように）
-$data.push(New collection("";0;0;0;"";"";"";"";"";"";"";"";""))
-
-  //単語データは2行目以降に
-$data.push(New collection("ルペック";1293;1293;1;"名詞";"固有名詞";"地域";"一般";"*";"*";"ルペック";"ルペック";"ルペック"))
-$data.push(New collection("リバルディエール";1291;1291;1;"名詞";"固有名詞";"人名";"名";"*";"*";"リバルディエール";"リバルディエール";"リバルディエール"))
-
-$csv:=New collection
-For each ($datum;$data)
-	$csv.push($datum.join(","))
-End for each 
-  //改行コードはLFで
-TEXT TO DOCUMENT($dictPath+"names.csv";$csv.join("\n");"utf-8";Document unchanged)
-
-  //辞書データの設定
-C_OBJECT($options)
-$options:=New object
-  //出力DICファイルパス
-$options.userdic:=$dictPath+"test.dic"
-  //入力CSVファイルのフォルダーパス
-$options.userdicdir:=$dictPath
-  //設定ファイル（dicrc,matrix.bin,pos-id.def,rewrite.def,left-id.def,right-id.def）の場所
-  //mecabのソースコードに含まれている設定ファイルはEUC-JPなので使用しない
-$options.dicdir:=Get 4D folder(Current resources folder)+"ipadic"
-$options.configCharset:="UTF-8"  //設定ファイルの文字コード
-$options.dictionaryCharset:="UTF-8"  //入力CSVファイルの文字コード
-  //出力DICファイルの文字コードはUTF-8固定
-
-$options.assignUserDictionaryCosts:=False
-
-  //辞書ファイルのコンパイル
-$method:="mecab_progress"
-MeCab INDEX DICTIONARY (JSON Stringify($options);$method)
-
-  //システム辞書＋ユーザー辞書を使用
-C_OBJECT($model)
-$model:=New object
-$model.dicdir:=Path to object(JSON Parse(MeCab Get model ).dicdir;Path is system).parentFolder+"ipadic"
-$model.userdic:=System folder(Desktop)+"test-dict"+Folder separator+"test.dic"
-MeCab SET MODEL (JSON Stringify($model))
-$model:=JSON Parse(MeCab Get model )
-```
-
 <img width="800" alt="2018-12-17 10 00 59" src="https://user-images.githubusercontent.com/1725068/50061348-ce7c4c80-01e2-11e9-9443-8f29f0ffee17.png">
 
-### N-best
+## N-best解を取り出すには
 
 ```
 $sentence:="ははははははと笑った"
@@ -213,3 +154,72 @@ End for each
 * 任意プロパティ
 
 ``options.assignUserDictionaryCosts``: （``feature.def``ファイルが``dicdir``に無ければ無視）  
+
+## ユーザー辞書を作成するには（自動コスト計算）
+
+```
+  //ユーザー辞書を作成する例（jumandic）
+
+  //作業フォルダーを用意
+$dictPath:=System folder(Desktop)+"jumandic-usr"+Folder separator
+DELETE FOLDER($dictPath;Delete with contents)
+CREATE FOLDER($dictPath;*)
+
+  //CSVファイルを作成
+C_COLLECTION($data)
+$data:=New collection
+
+  //1行目は空データにする（つぎの連結コストがマイナスにならないように）
+  //$data.push(New collection("";0;0;0;"名詞";"普通名詞";"*";"*";"";"";"*"))
+$data.push(New collection("";0;0;0;"";"";"";"";"";"";""))
+
+
+  //単語データ
+$data.push(New collection("ルペック";1129;1129;0;"名詞";"地名";"*";"*";"ルペック";"ルペック";"*"))
+$data.push(New collection("リバルディエール";1126;1126;0;"名詞";"人名";"*";"*";"リバルディエール";"リバルディエール";"*"))
+
+$csv:=New collection
+For each ($datum;$data)
+	$csv.push($datum.join(","))
+End for each 
+  //改行コードはLFで
+TEXT TO DOCUMENT($dictPath+"data.csv";$csv.join("\n");"utf-8";Document unchanged)
+
+  //辞書データの設定
+C_OBJECT($options)
+$options:=New object
+  //出力DICファイルパス
+$options.userdic:=$dictPath+"$"+Generate UUID+".csv"
+  //入力CSVファイルのフォルダーパス
+$options.userdicdir:=$dictPath
+  //設定ファイル（dicrc,matrix.bin,pos-id.def,rewrite.def,left-id.def,right-id.def）の場所
+  //mecabのソースコードに含まれている設定ファイルはEUC-JPなので使用しない
+$options.dicdir:=Get 4D folder(Current resources folder)+"jumandic"
+$options.configCharset:="UTF-8"  //設定ファイルの文字コード
+$options.dictionaryCharset:="UTF-8"  //入力CSVファイルの文字コード
+  //出力DICファイルの文字コードはUTF-8固定
+
+$options.assignUserDictionaryCosts:=True
+
+  //コストの自動計算
+$method:="mecab_progress"
+MeCab INDEX DICTIONARY (JSON Stringify($options);$method)
+
+MOVE DOCUMENT($dictPath+"data.csv";$dictPath+"data.txt")
+MOVE DOCUMENT($options.userdic;$dictPath+"data.csv")
+
+$options.assignUserDictionaryCosts:=False
+$options.userdic:=$dictPath+"data.dic"
+
+  //辞書ファイルの作成
+MeCab INDEX DICTIONARY (JSON Stringify($options);$method)
+
+  //システム辞書＋ユーザー辞書を使用
+C_OBJECT($model)
+$model:=New object
+$model.dicdir:=Path to object(JSON Parse(MeCab Get model ).dicdir;Path is system).parentFolder+"jumandic"
+$model.userdic:=$options.userdic
+
+MeCab SET MODEL (JSON Stringify($model))
+$model:=JSON Parse(MeCab Get model )
+```
