@@ -114,8 +114,8 @@ CREATE FOLDER($dictPath;*)
 C_COLLECTION($data)
 $data:=New collection
 
-  //1行目は空データにする
-$data.push(New collection("";0;0;0;"*";"*";"*";"*";"*";"*";"";"";""))
+  //1行目は空データにする（つぎの連結コストがマイナスにならないように）
+$data.push(New collection("";0;0;0;"";"";"";"";"";"";"";"";""))
 
   //単語データは2行目以降に
 $data.push(New collection("ルペック";1293;1293;1;"名詞";"固有名詞";"地域";"一般";"*";"*";"ルペック";"ルペック";"ルペック"))
@@ -141,6 +141,8 @@ $options.dicdir:=Get 4D folder(Current resources folder)+"ipadic"
 $options.configCharset:="UTF-8"  //設定ファイルの文字コード
 $options.dictionaryCharset:="UTF-8"  //入力CSVファイルの文字コード
   //出力DICファイルの文字コードはUTF-8固定
+
+$options.assignUserDictionaryCosts:=False
 
   //辞書ファイルのコンパイル
 $method:="mecab_progress"
