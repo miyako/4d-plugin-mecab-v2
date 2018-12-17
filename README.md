@@ -170,7 +170,6 @@ C_COLLECTION($data)
 $data:=New collection
 
   //1行目は空データにする（つぎの連結コストがマイナスにならないように）
-  //$data.push(New collection("";0;0;0;"名詞";"普通名詞";"*";"*";"";"";"*"))
 $data.push(New collection("";0;0;0;"";"";"";"";"";"";""))
 
 
