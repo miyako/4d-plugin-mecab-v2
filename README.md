@@ -177,3 +177,23 @@ End for each
 
 <img width="800" alt="2018-12-17 11 30 13" src="https://user-images.githubusercontent.com/1725068/50063356-64b66f80-01ef-11e9-901f-a07ebd8c17b5.png">
 
+## システム辞書を作成するには
+
+* 必須プロパティ
+
+``options.outdir``: 出力フォルダーパス
+``options.sysdicdir``: 入力フォルダーパス（CSVファイルの場所）
+``options.dicdir``: 設定ファイル
+
+* 任意プロパティ
+
+``options.configCharset``: 設定ファイルの文字コード（既定：``EUC-JP``）
+``options.dictionaryCharset``: 入力CSVファイルの文字コード（既定：``EUC-JP``）
+
+/出力ファイルの文字コードはUTF-8固定です。
+
+``options.buildUnknown``: ``unk.dic``を出力（既定：``false``）
+``options.buildMatrix``: ``matrix.bin``を出力（既定：``false``）
+``options.buildCharCategory``: ``char.bin``を出力（既定：``false``）
+``options.buildSysdic``: ``sys.dic``を出力（既定：``true``）
+``options.buildModel``: ``model.bin``を出力（既定：``false``; ``model.def``が``dicdir``に無ければ無視）
