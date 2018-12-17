@@ -246,7 +246,7 @@ $model:=JSON Parse(MeCab Get model )
 ## ユーザー辞書を作成するには（モデル無し）
 
 ```
-  //ユーザー辞書を作成する例（jipadic）
+  //ユーザー辞書を作成する例（ipadic）
 
   //作業フォルダーを用意
 $dictPath:=System folder(Desktop)+"ipadic-usr"+Folder separator
