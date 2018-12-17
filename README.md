@@ -136,10 +136,20 @@ End for each
 出力ファイルの文字コードはUTF-8固定です。
 
 ``options.buildUnknown``: ``unk.dic``を出力（既定：``false``）  
-``options.buildMatrix``: ``matrix.bin``を出力（既定：``false``; ``matrix.def``が``dicdir``に無ければ無視）  
-``options.buildCharCategory``: ``char.bin``を出力（既定：``false``）  
+``options.buildMatrix``: ``matrix.bin``を出力（既定：``false``, ``matrix``を参照）  
+``options.buildCharCategory``: ``char.bin``を出力（既定：``false``; ``char``, ``unk``を参照）  
 ``options.buildSysdic``: ``sys.dic``を出力（既定：``true``）   
-``options.buildModel``: ``model.bin``を出力（既定：``false``; ``model.def``が``dicdir``に無ければ無視）  
+``options.buildModel``: ``model.bin``を出力（既定：``false``; ``model``が無ければ無視）  
+``options.matrix``: ``matrix.def``のファイルパス    
+``options.char``: ``char.def``のファイルパス    
+``options.unk``: ``unk.def``のファイルパス
+``options.model``: ``model.def``のファイルパス  
+
+``matrix.def``未指定の場合，既定（``1 1\n0 0 0\n``）が使用されます。
+
+``char.def``未指定の場合，既定（``DEFAULT 1 0 0\nSPACE   0 1 0\n0x0020 SPACE\n``）が使用されます。
+
+``unk.def``未指定の場合，既定（``DEFAULT,0,0,0,*\nSPACE,0,0,0,*\n``）が使用されます。
 
  ``model.bin``を出力する場合，辞書の文字コード（``dictionaryCharset``）は出力ファイルの文字コード（``utf8``）と合致していなければなりません。
  
@@ -150,31 +160,30 @@ End for each
 ``options.userdic``: 出力ファイルパス  
 ``options.userdicdir``: 入力フォルダーパス（CSVファイルの場所）  
 ``options.dicdir``: 設定フォルダーパス    
+``options.rewrite``: ``rewrite.def``のファイルパス     
 
 * 任意プロパティ
 
-``options.assignUserDictionaryCosts``: 自動コスト計算で``.csv``を出力（既定：``false``）   
+``options.assignUserDictionaryCosts``: 自動コスト計算で``.csv``を出力（既定：``false``; ``model``, ``char``, ``feature``を参照）   
 
-* ``dicdir``に用意しておくもの（``assignUserDictionaryCosts=false``の場合）
-
-``matrix.bin``または``matrix.def``  
-``dicrc``  
-``pos-id.def``  
-``left-id.def``  
-``right-id.def``  
-``rewrite.def``  
+``options.model``: ``model.def``または``model.bin``のファイルパス   
+``options.char``: ``char.def``または``char.bin``のファイルパス  
+``options.feature``: ``feature.def``のファイルパス  
 
 * ``dicdir``に用意しておくもの（``assignUserDictionaryCosts=true``の場合）
 
 ``matrix.bin``または``matrix.def``  
 ``dicrc``  
-``pos-id.def``  
 ``left-id.def``  
 ``right-id.def``  
-``rewrite.def``  
-``feature.def``  
-``char.bin``  
-``model.bin``  
+
+* ``dicdir``に用意しておくもの（``assignUserDictionaryCosts=false``の場合）
+
+``matrix.bin``または``matrix.def``  
+``dicrc``  
+``left-id.def``  
+``right-id.def``  
+``pos-id.def``  
 
 ## ユーザー辞書を作成するには（自動コスト計算）
 
