@@ -152,21 +152,21 @@ bool Dictionary::assignUserDictionaryCosts(
   const std::string from = param.get<std::string>("dictionary-charset");
 
   const int factor = param.get<int>("cost-factor");
-  CHECK_DIE(factor > 0)   << "cost factor needs to be positive value";
+  CHECK_DIE(factor > 0) //  << "cost factor needs to be positive value";
 
   std::string config_charset = param.get<std::string>("config-charset");
   if (config_charset.empty()) {
     config_charset = from;
   }
 
-  CHECK_DIE(!from.empty()) << "input dictionary charset is empty";
+  CHECK_DIE(!from.empty()) // << "input dictionary charset is empty";
 
   Iconv config_iconv;
   CHECK_DIE(config_iconv.open(config_charset.c_str(), from.c_str()))
-      << "iconv_open() failed with from=" << config_charset << " to=" << from;
+    //  << "iconv_open() failed with from=" << config_charset << " to=" << from;
 
   rewriter.open(rewrite_file.c_str(), &config_iconv);
-  CHECK_DIE(fi.open(param)) << "cannot open feature index";
+  CHECK_DIE(fi.open(param)) // << "cannot open feature index";
 
   CHECK_DIE(property.open(param));
   property.set_charset(from.c_str());
@@ -181,36 +181,36 @@ bool Dictionary::assignUserDictionaryCosts(
            right_id_file.c_str(), &config_iconv);
   CHECK_DIE(cid.left_size()  == matrix.left_size() &&
             cid.right_size() == matrix.right_size())
-      << "Context ID files("
-      << left_id_file
-      << " or "
-      << right_id_file << " may be broken: "
-      << cid.left_size() << " " << matrix.left_size() << " "
-      << cid.right_size() << " " << matrix.right_size();
+//      << "Context ID files("
+//      << left_id_file
+//      << " or "
+//      << right_id_file << " may be broken: "
+//      << cid.left_size() << " " << matrix.left_size() << " "
+//      << cid.right_size() << " " << matrix.right_size();
 
   std::ofstream ofs(output);
-  CHECK_DIE(ofs) << "permission denied: " << output;
+  CHECK_DIE(ofs) // << "permission denied: " << output;
 
   for (size_t i = 0; i < dics.size(); ++i) {
     std::ifstream ifs(WPATH(dics[i].c_str()));
-    CHECK_DIE(ifs) << "no such file or directory: " << dics[i];
+    CHECK_DIE(ifs) // << "no such file or directory: " << dics[i];
     std::cout << "reading " << dics[i] << " ... ";
     scoped_fixed_array<char, BUF_SIZE> line;
     while (ifs.getline(line.get(), line.size())) {
       char *col[8];
       const size_t n = tokenizeCSV(line.get(), col, 5);
-      CHECK_DIE(n == 5) << "format error: " << line.get();
+      CHECK_DIE(n == 5) // << "format error: " << line.get();
       std::string w = col[0];
       const std::string feature = col[4];
       const int cost = calcCost(w, feature, factor,
                                 &fi, &rewriter, &property);
       std::string ufeature, lfeature, rfeature;
       CHECK_DIE(rewriter.rewrite(feature, &ufeature, &lfeature, &rfeature))
-          << "rewrite failed: " << feature;
+         // << "rewrite failed: " << feature;
       const int lid = cid.lid(lfeature.c_str());
       const int rid = cid.rid(rfeature.c_str());
       CHECK_DIE(lid >= 0 && rid >= 0 && matrix.is_valid(lid, rid))
-          << "invalid ids are found lid=" << lid << " rid=" << rid;
+         // << "invalid ids are found lid=" << lid << " rid=" << rid;
       escape_csv_element(&w);
       ofs << w << ',' << lid << ',' << rid << ','
           << cost << ',' << feature << '\n';
@@ -255,7 +255,7 @@ bool Dictionary::compile(const Param &param,
   const int type = param.get<int>("type");
   const std::string node_format = param.get<std::string>("node-format");
   const int factor = param.get<int>("cost-factor");
-  CHECK_DIE(factor > 0)   << "cost factor needs to be positive value";
+  CHECK_DIE(factor > 0) //  << "cost factor needs to be positive value";
 
   // for backward compatibility
   std::string config_charset = param.get<std::string>("config-charset");
@@ -263,16 +263,16 @@ bool Dictionary::compile(const Param &param,
     config_charset = from;
   }
 
-  CHECK_DIE(!from.empty()) << "input dictionary charset is empty";
-  CHECK_DIE(!to.empty())   << "output dictionary charset is empty";
+  CHECK_DIE(!from.empty()) // << "input dictionary charset is empty";
+  CHECK_DIE(!to.empty()) //  << "output dictionary charset is empty";
 
   Iconv iconv;
   CHECK_DIE(iconv.open(from.c_str(), to.c_str()))
-      << "iconv_open() failed with from=" << from << " to=" << to;
+    //  << "iconv_open() failed with from=" << from << " to=" << to;
 
   Iconv config_iconv;
   CHECK_DIE(config_iconv.open(config_charset.c_str(), from.c_str()))
-      << "iconv_open() failed with from=" << config_charset << " to=" << from;
+     // << "iconv_open() failed with from=" << config_charset << " to=" << from;
 
   if (!node_format.empty()) {
     writer.reset(new Writer);
@@ -301,7 +301,7 @@ bool Dictionary::compile(const Param &param,
                   << " is not found. minimum setting is used." << std::endl;
         is = &iss;
       } else {
-        CHECK_DIE(ifs) << "no such file or directory: " << dics[i];
+        CHECK_DIE(ifs) // << "no such file or directory: " << dics[i];
       }
     }
 
@@ -313,7 +313,7 @@ bool Dictionary::compile(const Param &param,
     while (is->getline(line.get(), line.size())) {
       char *col[8];
       const size_t n = tokenizeCSV(line.get(), col, 5);
-      CHECK_DIE(n == 5) << "format error: " << line.get();
+      CHECK_DIE(n == 5) // << "format error: " << line.get();
 
       std::string w = col[0];
       int lid = toInt(col[1]);
@@ -324,12 +324,12 @@ bool Dictionary::compile(const Param &param,
 
       if (cost == INT_MAX) {
         CHECK_DIE(type == MECAB_USR_DIC)
-            << "cost field should not be empty in sys/unk dic.";
+           // << "cost field should not be empty in sys/unk dic.";
         if (!rewrite.get()) {
           rewrite.reset(new DictionaryRewriter);
           rewrite->open(rewrite_file.c_str(), &config_iconv);
           fi.reset(new DecoderFeatureIndex);
-          CHECK_DIE(fi->open(param)) << "cannot open feature index";
+          CHECK_DIE(fi->open(param)) // << "cannot open feature index";
           property.reset(new CharProperty);
           CHECK_DIE(property->open(param));
           property->set_charset(from.c_str());
@@ -346,7 +346,7 @@ bool Dictionary::compile(const Param &param,
 
         std::string ufeature, lfeature, rfeature;
         CHECK_DIE(rewrite->rewrite(feature, &ufeature, &lfeature, &rfeature))
-            << "rewrite failed: " << feature;
+          //  << "rewrite failed: " << feature;
 
         if (!cid.get()) {
           cid.reset(new ContextID);
@@ -354,10 +354,10 @@ bool Dictionary::compile(const Param &param,
                     right_id_file.c_str(), &config_iconv);
           CHECK_DIE(cid->left_size()  == matrix.left_size() &&
                     cid->right_size() == matrix.right_size())
-              << "Context ID files("
-              << left_id_file
-              << " or "
-              << right_id_file << " may be broken";
+//              << "Context ID files("
+//              << left_id_file
+//              << " or "
+//              << right_id_file << " may be broken";
         }
 
         lid = cid->lid(lfeature.c_str());
@@ -365,7 +365,7 @@ bool Dictionary::compile(const Param &param,
       }
 
       CHECK_DIE(lid >= 0 && rid >= 0 && matrix.is_valid(lid, rid))
-          << "invalid ids are found lid=" << lid << " rid=" << rid;
+       //   << "invalid ids are found lid=" << lid << " rid=" << rid;
 
       if (w.empty()) {
         std::cerr << "empty word is found, discard this line" << std::endl;
@@ -397,8 +397,8 @@ bool Dictionary::compile(const Param &param,
         os->clear();
         CHECK_DIE(writer->writeNode(lattice.get(),
                                     node_format.c_str(),
-                                    &node, &*os)) <<
-            "conversion error: " << feature << " with " << node_format;
+                                    &node, &*os)) // <<
+           // "conversion error: " << feature << " with " << node_format;
         *os << '\0';
         feature = os->str();
       }
@@ -466,7 +466,7 @@ bool Dictionary::compile(const Param &param,
   Darts::DoubleArray da;
   CHECK_DIE(da.build(str.size(), const_cast<char **>(&str[0]),
                      &len[0], &val[0], &progress_bar_darts, NULL) == 0)
-      << "unknown error in building double-array";
+    //  << "unknown error in building double-array";
 
   std::string tbuf;
   for (size_t i = 0; i < dic.size(); ++i) {
@@ -496,7 +496,7 @@ bool Dictionary::compile(const Param &param,
   std::strncpy(charset, to.c_str(), 31);
 
   std::ofstream bofs(WPATH(output), std::ios::binary|std::ios::out);
-  CHECK_DIE(bofs) << "permission denied: " << output;
+  CHECK_DIE(bofs) // << "permission denied: " << output;
 
   unsigned int magic = 0;
 

@@ -13,6 +13,7 @@
 #include "4DPlugin.h"
 
 #define DEFAULT_DICNAME "ipadic"
+#define USE_DEFAULT_DIC 0
 
 std::mutex mutexModel; /* gModel,gModelPath,gDicDir,gUserDics */
 
@@ -245,7 +246,9 @@ void CommandDispatcher (PA_long32 pProcNum, sLONG_PTR *pResult, PackagePtr pPara
 	{
         case kInitPlugin :
         case kServerInitPlugin :
+#if USE_DEFAULT_DIC
             OnStartup();
+#endif
             break;
             
         case kDeinitPlugin :
@@ -2461,11 +2464,8 @@ void MeCab_INDEX_DICTIONARY(sLONG_PTR *pResult, PackagePtr pParams)
         std::string userdicdir;
         std::string sysdicdir;
         std::string modeldef;
-        std::string matrixdef;
-        std::string chardef;
-        std::string unkdef;
-        std::string rewritedef;
         std::string featuredef;
+        std::string matrixdef;
         
         std::string dictionaryCharset = "EUC-JP";
         std::string configCharset = "EUC-JP";
@@ -2523,42 +2523,6 @@ void MeCab_INDEX_DICTIONARY(sLONG_PTR *pResult, PackagePtr pParams)
             {
             modeldef = it->asString();
             }
-            }else
-            if(name == "matrix")
-            {
-            if(it->isString())
-            {
-            matrixdef = it->asString();
-            }
-            }else
-                if(name == "char")
-                {
-                    if(it->isString())
-                    {
-                        chardef = it->asString();
-                    }
-                }else
-            if(name == "unk")
-            {
-            if(it->isString())
-            {
-            unkdef = it->asString();
-            }
-            }else
-            if(name == "rewrite")
-            {
-            if(it->isString())
-            {
-            rewritedef = it->asString();
-            }
-            }else
-            if(name == "unk")
-            {
-            if(it->isString())
-            {
-            unkdef = it->asString();
-            }
-
             }else
             if(name == "feature")
             {
@@ -2667,6 +2631,9 @@ void MeCab_INDEX_DICTIONARY(sLONG_PTR *pResult, PackagePtr pParams)
 #if VERSIONMAC
             convert_dicdir_to_posix(dicdir);
 #endif
+            std::string chardef = DCONF(CHAR_PROPERTY_FILE);/* fixed */
+            std::string rewritedef = DCONF(REWRITE_FILE);/* fixed */
+            
             MeCab::Param param;
             /* load params from dicrc */
             if(!param.load(DCONF(DICRC)))
@@ -2700,16 +2667,15 @@ void MeCab_INDEX_DICTIONARY(sLONG_PTR *pResult, PackagePtr pParams)
                 
 #if VERSIONMAC
                 convert_userdic_to_posix(modeldef);
-                convert_userdic_to_posix(chardef);
-                convert_userdic_to_posix(rewritedef);
                 convert_userdic_to_posix(featuredef);
 #endif
                 
                 param.set("model", modeldef);
-                param.set("char", chardef);
-                param.set("rewrite", rewritedef);
                 param.set("feature", featuredef);
                 
+                param.set("char", chardef);/* DCONF(CHAR_PROPERTY_FILE) */
+                param.set("rewrite", rewritedef);/* DCONF(REWRITE_FILE) */
+
                 /* get csv files in dicdir (full posix path, please) */
                 std::vector<std::string> dic;
                 
@@ -2727,6 +2693,16 @@ void MeCab_INDEX_DICTIONARY(sLONG_PTR *pResult, PackagePtr pParams)
                         
                         if (assignUserDictionaryCosts)
                         {
+                            if(featuredef.length() == 0)
+                            {
+                                featuredef = DCONF(FEATURE_FILE);
+                            }
+                            
+                            if(modeldef.length() == 0)
+                            {
+                                modeldef = DCONF(MODEL_FILE);
+                            }
+                            
                             if(compile_dictionary_auto(param, dic, userdic.c_str(), &ctx))
                             {
                                 std::string message = userdic.c_str();
@@ -2765,8 +2741,10 @@ void MeCab_INDEX_DICTIONARY(sLONG_PTR *pResult, PackagePtr pParams)
 #if VERSIONMAC
                         convert_dicdir_to_posix(sysdicdir);
                         convert_dicdir_to_posix(outdir);
-                        convert_userdic_to_posix(unkdef);
 #endif
+                        std::string chardef = MeCab::create_filename(sysdicdir, std::string(CHAR_PROPERTY_DEF_FILE));
+                        std::string unkdef = MeCab::create_filename(sysdicdir, std::string(UNK_DEF_FILE));
+                        
                         enum_csv_dictionaries(sysdicdir, dic);
                         
                         if (buildCharCategory)
@@ -2804,7 +2782,12 @@ void MeCab_INDEX_DICTIONARY(sLONG_PTR *pResult, PackagePtr pParams)
                         
                         if (buildModel)
                         {
-                            if (MeCab::file_exists(modeldef.c_str()))
+                            if (!MeCab::file_exists(modeldef.c_str()))
+                            {
+                                modeldef = MeCab::create_filename(sysdicdir, std::string(MODEL_DEF_FILE));
+                            }
+                            
+                            if ( MeCab::file_exists(modeldef.c_str()))
                             {
                                 if(compile_model(param,
                                                  modeldef.c_str(),
@@ -2832,7 +2815,6 @@ void MeCab_INDEX_DICTIONARY(sLONG_PTR *pResult, PackagePtr pParams)
                         {
                             if(dic.size() == 0)
                             {
-                                
                                 std::string message = userdicdir;
                                 callback(&Param2_callback,
                                          callback_event_error_missing_csv_files,
@@ -2858,10 +2840,8 @@ void MeCab_INDEX_DICTIONARY(sLONG_PTR *pResult, PackagePtr pParams)
                         
                         if (buildMatrix)
                         {
-#if VERSIONMAC
-                            convert_userdic_to_posix(matrixdef);
-#endif
-                            /* matrix.def is not mandatory */
+                            matrixdef = MeCab::create_filename(sysdicdir, std::string(MATRIX_DEF_FILE));
+
                             if(compile_matrix(matrixdef.c_str(), OCONF(MATRIX_FILE), &ctx))
                             {
                                 std::string message = OCONF(MATRIX_FILE);
