@@ -45,9 +45,9 @@ end if
 
 コスト自動計算モード（``assignUserDictionaryCosts``）でユーザー辞書を作成するためには，``rewrite.def``, ``char.bin``, ``model.bin``, ``feature.def``が必要です。下記のリソースにファイルが含まれています。
 
-[jumandic-utf8](https://github.com/miyako/4d-plugin-mecab-v2/releases/tag/jumandic-utf8)
-
 [ipadic-utf8](https://github.com/miyako/4d-plugin-mecab-v2/releases/tag/ipadic-utf8)
+
+[jumandic-utf8](https://github.com/miyako/4d-plugin-mecab-v2/releases/tag/jumandic-utf8)
 
 システム辞書から``model.bin``を作成するためには，``model.def``が必要です。IPA辞書の学習モデルはmecabやmecab-ipadicのソースコードと一緒に配布されていませんでした。
 
