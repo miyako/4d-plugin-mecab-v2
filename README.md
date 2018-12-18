@@ -25,6 +25,10 @@ use [carbon] branch for 32-bit support
 
 下記のファイルをダウンロードしておき，スタートアップで``MeCab SET MODEL``を実行してください。
 
+* [ipadic-utf8-compiled](https://github.com/miyako/4d-plugin-mecab-v2/releases/download/mecab-ipadic-utf8-compiled/ipadic.zip)
+
+* [jumandic-utf8-compiled](https://github.com/miyako/4d-plugin-mecab-v2/releases/download/mecab-jumandic-utf8-compiled/jumandic.zip)
+
 ```
 C_OBJECT($model)
 $model:=JSON Parse(MeCab Get model ;Is object)
@@ -39,19 +43,28 @@ If ($model=Null)
 end if
 ```
 
-[ipadic](https://github.com/miyako/4d-plugin-mecab-v2/releases/tag/ipadic)
-
 [jumandic](https://github.com/miyako/4d-plugin-mecab-v2/releases/tag/jumandic)
 
-コスト自動計算モード（``assignUserDictionaryCosts``）でユーザー辞書を作成するためには，``rewrite.def``, ``char.bin``, ``model.bin``, ``feature.def``が必要です。下記のリソースにファイルが含まれています。
+コスト自動計算モード（``assignUserDictionaryCosts``）でユーザー辞書を作成するためには
 
-[ipadic-utf8](https://github.com/miyako/4d-plugin-mecab-v2/releases/tag/ipadic-utf8)
+* ``rewrite.def``  
+* ``char.bin``  
+* ``model.bin``  
+* ``feature.def``  
 
-[jumandic-utf8](https://github.com/miyako/4d-plugin-mecab-v2/releases/tag/jumandic-utf8)
+が必要です。
+
+``rewrite.def``と``char.bin``は辞書に含まれています。
+
+``model.bin``と``feature.def``は下記からダウンロードすることができます。
+
+* [mecab-ipadic-utf8-conf](https://github.com/miyako/4d-plugin-mecab-v2/releases/download/mecab-ipadic-utf8-conf/ipadic.utf8.zip)
+
+* [mecab-jumandic-utf8-conf](https://github.com/miyako/4d-plugin-mecab-v2/releases/download/mecab-jumandic-utf8-conf/jumandic.utf8.zip)
 
 システム辞書から``model.bin``を作成するためには，``model.def``が必要です。IPA辞書の学習モデルはmecabやmecab-ipadicのソースコードと一緒に配布されていませんでした。
 
-[ipadic-model](mecab-ipadic-2.7.0-20070801.model)
+* [mecab-ipadic-2.7.0-20070801.model](https://github.com/miyako/4d-plugin-mecab-v2/releases/download/ipa-model/mecab-ipadic-2.7.0-20070801.model)
 
 ## Syntax
 
