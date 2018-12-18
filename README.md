@@ -19,7 +19,7 @@ use [carbon] branch for 32-bit support
 
 [1.0]
 
-### Install
+## インストール
 
 プラグインには辞書ファイルが含まれていません。
 
