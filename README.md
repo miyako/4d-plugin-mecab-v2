@@ -200,7 +200,7 @@ End for each
  システム辞書ファイルとして使用するフォルダーには``dicrc``ファイルがなければなりません。
  
 ```
-  //システム辞書を作成する例（ipadic）
+  //システム辞書を作成する例（ipadic-utf8）
 
   //作業フォルダーを用意
 $dictPath:=System folder(Desktop)+"ipadic-sys"+Folder separator
@@ -215,108 +215,34 @@ $options:=New object
 $options.outdir:=$dictPath
 
   //入力CSVファイルのフォルダーパス（ダウンロードした辞書のソースファイル群）
-$options.sysdicdir:=System folder(Desktop)+"mecab-ipadic"+Folder separator
-$options.dictionaryCharset:="EUC-JP"  //入力CSVファイルの文字コード
+$options.sysdicdir:=System folder(Desktop)+"mecab-ipadic-utf8"+Folder separator
+$options.dictionaryCharset:="UTF-8"  //入力CSVファイルの文字コード
 
   //設定ファイルの場所
 $options.dicdir:=Get 4D folder(Current resources folder)+"ipadic"
-$options.configCharset:="EUC-JP"  //設定ファイルの文字コード（ipaはEUC-JP）
+$options.configCharset:="UTF-8"  //設定ファイルの文字コード
 
   //作成するファイルの指定　（カッコ内は依存設定ファイル）
 $options.buildUnknown:=True  //unk.dic (unk.def)
-$options.buildMatrix:=True  //matrix.bin (matrix.def)
-$options.buildCharCategory:=True  //char.bin (char.def,unk.def)
-$options.buildModel:=False  //model.bin (model.def)
 $options.buildSysdic:=True  //sys.dic (unk.def)
-
-  //依存設定ファイル
-$options.matrix:=$options.sysdicdir+"matrix.def"  //not matrix.bin
-$options.char:=$options.sysdicdir+"char.def"  //not char.bin
-$options.unk:=$options.sysdicdir+"unk.def"
-$options.model:=$options.sysdicdir+"model.def"  //not model.bin
-
-  //辞書ファイルのコンパイル
-
-$method:="mecab_progress"
-MeCab INDEX DICTIONARY (JSON Stringify($options);$method)
-
-  //辞書設定ファイルのコピー
-COPY DOCUMENT($options.sysdicdir+"dicrc";$options.outdir+"dicrc";*)
-
-If (True)
-	  //なくてもシステム辞書は使用できますが，後でユーザー辞書を作成するときに必要です
-	COPY DOCUMENT($options.sysdicdir+"left-id.def";$options.outdir+"left-id.def";*)
-	COPY DOCUMENT($options.sysdicdir+"pos-id.def";$options.outdir+"pos-id.def";*)
-	COPY DOCUMENT($options.sysdicdir+"rewrite.def";$options.outdir+"rewrite.def";*)
-	COPY DOCUMENT($options.sysdicdir+"right-id.def";$options.outdir+"right-id.def";*)
-	  //自動コスト計算付きでユーザー辞書を作成するときに必要です
-	COPY DOCUMENT($options.sysdicdir+"feature.def";$options.outdir+"feature.def";*)
-End if 
-
-  //システム辞書を使用
-C_OBJECT($model)
-$model:=New object
-$model.dicdir:=$dictPath
-
-MeCab SET MODEL (JSON Stringify($model))
-
-$window:=Open form window("TEST")
-DIALOG("TEST")
-```
- 
-```
-  //システム辞書を作成する例（jumandic）
-
-  //作業フォルダーを用意
-$dictPath:=System folder(Desktop)+"jumandic-sys"+Folder separator
-DELETE FOLDER($dictPath;Delete with contents)
-CREATE FOLDER($dictPath;*)
-
-  //辞書データの設定
-C_OBJECT($options)
-$options:=New object
-
-  //出力SYS.DICフォルダーパス
-$options.outdir:=$dictPath
-
-  //入力CSVファイルのフォルダーパス（ダウンロードした辞書のソースファイル群）
-$options.sysdicdir:=System folder(Desktop)+"mecab-jumandic"+Folder separator
-$options.dictionaryCharset:="UTF-8"  //入力CSVファイルの文字コード（jumanはUTF-8）
-
-  //設定ファイルの場所
-$options.dicdir:=Get 4D folder(Current resources folder)+"jumandic"
-$options.configCharset:="UTF-8"  //設定ファイルの文字コード（jumanはUTF-8）
-
-  //作成するファイルの指定　（カッコ内は依存設定ファイル）
-$options.buildUnknown:=True  //unk.dic (unk.def)
 $options.buildMatrix:=True  //matrix.bin (matrix.def)
 $options.buildCharCategory:=True  //char.bin (char.def,unk.def)
 $options.buildModel:=True  //model.bin (model.def)
-$options.buildSysdic:=True  //sys.dic (unk.def)
-
-  //依存設定ファイル
-$options.matrix:=$options.sysdicdir+"matrix.def"  //not matrix.bin
-$options.char:=$options.sysdicdir+"char.def"  //not char.bin
-$options.unk:=$options.sysdicdir+"unk.def"
-$options.model:=$options.sysdicdir+"model.def"  //not model.bin
 
   //辞書ファイルのコンパイル
 
 $method:="mecab_progress"
 MeCab INDEX DICTIONARY (JSON Stringify($options);$method)
 
-  //辞書設定ファイルのコピー
+  //辞書設定ファイルのコピー（システム）
 COPY DOCUMENT($options.sysdicdir+"dicrc";$options.outdir+"dicrc";*)
 
-If (True)
-	  //なくてもシステム辞書は使用できますが，後でユーザー辞書を作成するときに必要です
-	COPY DOCUMENT($options.sysdicdir+"left-id.def";$options.outdir+"left-id.def";*)
-	COPY DOCUMENT($options.sysdicdir+"pos-id.def";$options.outdir+"pos-id.def";*)
-	COPY DOCUMENT($options.sysdicdir+"rewrite.def";$options.outdir+"rewrite.def";*)
-	COPY DOCUMENT($options.sysdicdir+"right-id.def";$options.outdir+"right-id.def";*)
-	  //自動コスト計算付きでユーザー辞書を作成するときに必要です
-	COPY DOCUMENT($options.sysdicdir+"feature.def";$options.outdir+"feature.def";*)
-End if 
+  //辞書設定ファイルコピー（ユーザー）
+COPY DOCUMENT($options.sysdicdir+"left-id.def";$options.outdir+"left-id.def";*)
+COPY DOCUMENT($options.sysdicdir+"pos-id.def";$options.outdir+"pos-id.def";*)
+COPY DOCUMENT($options.sysdicdir+"rewrite.def";$options.outdir+"rewrite.def";*)
+COPY DOCUMENT($options.sysdicdir+"right-id.def";$options.outdir+"right-id.def";*)
+COPY DOCUMENT($options.sysdicdir+"feature.def";$options.outdir+"feature.def";*)
 
   //システム辞書を使用
 C_OBJECT($model)
@@ -364,10 +290,10 @@ DIALOG("TEST")
 ## ユーザー辞書を作成するには（自動コスト計算）
 
 ```
-  //ユーザー辞書を作成する例（jumandic）
+  //ユーザー辞書を作成する例（ipadic/コスト自動計算）
 
   //作業フォルダーを用意
-$dictPath:=System folder(Desktop)+"jumandic-usr"+Folder separator
+$dictPath:=System folder(Desktop)+"ipadic-usr"+Folder separator
 DELETE FOLDER($dictPath;Delete with contents)
 CREATE FOLDER($dictPath;*)
 
@@ -376,11 +302,11 @@ C_COLLECTION($data;$datum)
 $data:=New collection
 
   //1行目は空データにする（つぎの連結コストがマイナスにならないように）
-$data.push(New collection("";0;0;0;"";"";"";"";"";"";""))
+$data.push(New collection("";0;0;0;"";"";"";"";"";"";"";"";""))
 
   //単語データは2行目以降に
-$data.push(New collection("ルペック";1129;1129;0;"名詞";"地名";"*";"*";"ルペック";"ルペック";"*"))
-$data.push(New collection("リバルディエール";1126;1126;0;"名詞";"人名";"*";"*";"リバルディエール";"リバルディエール";"*"))
+$data.push(New collection("ルペック";1293;1293;10000;"名詞";"固有名詞";"地域";"一般";"*";"*";"ルペック";"ルペック";"ルペック"))
+$data.push(New collection("リバルディエール";1291;1291;10000;"名詞";"固有名詞";"人名";"名";"*";"*";"リバルディエール";"リバルディエール";"リバルディエール"))
 
 $csv:=New collection
 For each ($datum;$data)
@@ -401,15 +327,14 @@ $options.userdicdir:=$dictPath
 $options.dictionaryCharset:="UTF-8"  //入力CSVファイルの文字コード
 
   //設定ファイルの場所
-$options.dicdir:=Get 4D folder(Current resources folder)+"jumandic"
+$options.dicdir:=Get 4D folder(Current resources folder)+"ipadic"
 $options.configCharset:="UTF-8"  //設定ファイルの文字コード
 
 $options.assignUserDictionaryCosts:=True
 
-$options.rewrite:=Get 4D folder(Current resources folder)+"jumandic.utf8.rewrite.def"
-$options.char:=Get 4D folder(Current resources folder)+"jumandic.utf8.char.bin"
-$options.model:=Get 4D folder(Current resources folder)+"jumandic.utf8.model.bin"
-$options.feature:=Get 4D folder(Current resources folder)+"jumandic.utf8.feature.def"
+  //追加の設定ファイル
+$options.model:=Get 4D folder(Current resources folder)+"ipadic.utf8.model.bin"
+$options.feature:=Get 4D folder(Current resources folder)+"ipadic.utf8.feature.def"
 
   //コストの自動計算
 $method:="mecab_progress"
@@ -427,7 +352,7 @@ MeCab INDEX DICTIONARY (JSON Stringify($options);$method)
   //システム辞書＋ユーザー辞書を使用
 C_OBJECT($model)
 $model:=New object
-$model.dicdir:=Get 4D folder(Current resources folder)+"jumandic"
+$model.dicdir:=Get 4D folder(Current resources folder)+"ipadic"
 $model.userdic:=$options.userdic
 
 MeCab SET MODEL (JSON Stringify($model))
@@ -440,7 +365,7 @@ DIALOG("TEST")
 ## ユーザー辞書を作成するには（モデル無し）
 
 ```
-  //ユーザー辞書を作成する例（ipadic）
+  //ユーザー辞書を作成する例（ipadic/コスト指定）
 
   //作業フォルダーを用意
 $dictPath:=System folder(Desktop)+"ipadic-usr"+Folder separator
@@ -481,7 +406,6 @@ $options.dicdir:=Get 4D folder(Current resources folder)+"ipadic"
 $options.configCharset:="UTF-8"  //設定ファイルの文字コード
 
 $options.assignUserDictionaryCosts:=False
-$options.rewrite:=$options.dicdir+Folder separator+"rewrite.def"
 
   //辞書ファイルのコンパイル
 $method:="mecab_progress"
