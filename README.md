@@ -323,7 +323,6 @@ DIALOG("TEST")
 * 任意プロパティ
 
 ``options.assignUserDictionaryCosts``: 自動コスト計算で``.csv``を出力（既定：``false``; ``model``, ``char``, ``feature``を参照）   
-
 ``options.model``: ``model.def``または``model.bin``のファイルパス（既定：``$(dicdir)/model.bin``）   
 ``options.char``: ``char.def``または``char.bin``のファイルパス（既定：``$(dicdir)/char.bin``）  
 ``options.feature``: ``feature.def``のファイルパス（既定：``$(dicdir)/feature.def``）  
