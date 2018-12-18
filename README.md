@@ -60,14 +60,12 @@ model|TEXT|``JSON``
 ``dict[]``: 辞書情報（下記オブジェクトのコレクション）  
 
 ``filename``: 辞書ファイル名 (``Path is POSIX``)  
-``charset``: 文字セット  
+``charset``: 文字セット（``utf8``）  
 ``size``: 登録語数  
 ``type``: ``0`` システム辞書 ``1`` ユーザー辞書 ``2`` 未知語辞書  
 ``lsize``: ``left``属性数  
 ``rsize`` ``right``属性数  
-``version``: 辞書バージョン  
-
-プラグインのResourcesフォルダーには``UTF-8``版の``ipadic``および``jumandic``辞書が収録されています。
+``version``: 辞書バージョン（``102``）  
 
 ## 辞書を切り替えるには
 
@@ -90,7 +88,7 @@ model|TEXT|``JSON``
 ``dicdir``: システム辞書のディレクトリパス (``Path is system``)  
 ``userdic[]`` or ``userdic``: ユーザー辞書のファイルパス (``Path is system``)  
 
-* ``userdic``には文字列または文字列のコレクションが渡せます。
+* ``userdic``（任意）には，文字列または文字列のコレクションが渡せます。
 
 ```
 result:=MeCab (sentence)
@@ -103,7 +101,7 @@ result|TEXT|``JSON``
 
 形態素分析の結果を返します。（下記オブジェクトのコレクション）
 
-``feature``: 素性（ipadic:品詞,品詞細分類1,品詞細分類2,品詞細分類3,活用形,活用型,原形,読み,発音）  
+``feature``: 素性  
 ``value``: 表層形  
 ``rcAttr``: 右連接状態番号 
 ``lcAttr``: 左連接状態番号
@@ -112,6 +110,10 @@ result|TEXT|``JSON``
 ``char_type``: 文字種ID  
 ``stat``: 形態素種類ID  
 ``isbest``: 最適パス (``true`` ``false``)  
+
+素性CSVのフォーマット，各種IDは辞書依存です。
+
+ipadic: 品詞,品詞細分類1,品詞細分類2,品詞細分類3,活用形,活用型,原形,読み,発音
 
 ## 形態素の配列を取り出すには
 
