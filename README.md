@@ -23,6 +23,8 @@ use [carbon] branch for 32-bit support
 
 [ipadic](https://github.com/miyako/4d-plugin-mecab-v2/releases/tag/ipadic)
 
+[jumandic](https://github.com/miyako/4d-plugin-mecab-v2/releases/tag/jumandic)
+
 ## Syntax
 
 ```
