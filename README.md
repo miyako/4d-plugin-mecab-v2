@@ -318,15 +318,15 @@ DIALOG("TEST")
 ``options.userdic``: 出力ファイルパス  
 ``options.userdicdir``: 入力フォルダーパス（CSVファイルの場所）  
 ``options.dicdir``: 設定フォルダーパス    
-``options.rewrite``: ``rewrite.def``のファイルパス     
+``options.rewrite``: ``rewrite.def``のファイルパス（既定：``$(dicdir)/rewrite.def``）     
 
 * 任意プロパティ
 
 ``options.assignUserDictionaryCosts``: 自動コスト計算で``.csv``を出力（既定：``false``; ``model``, ``char``, ``feature``を参照）   
 
-``options.model``: ``model.def``または``model.bin``のファイルパス   
-``options.char``: ``char.def``または``char.bin``のファイルパス  
-``options.feature``: ``feature.def``のファイルパス  
+``options.model``: ``model.def``または``model.bin``のファイルパス（既定：``$(dicdir)/model.bin``）   
+``options.char``: ``char.def``または``char.bin``のファイルパス（既定：``$(dicdir)/char.bin``）  
+``options.feature``: ``feature.def``のファイルパス（既定：``$(dicdir)/feature.def``）  
 
 * ``dicdir``に用意しておくもの（``assignUserDictionaryCosts=true``の場合）
 
