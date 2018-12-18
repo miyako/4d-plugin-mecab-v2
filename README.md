@@ -19,6 +19,51 @@ use [carbon] branch for 32-bit support
 
 [1.0]
 
+## Install
+
+プラグインには辞書ファイルが含まれていません。
+
+下記のファイルをダウンロードしておき，スタートアップで``MeCab SET MODEL``を実行してください。
+
+* [ipadic-utf8-compiled](https://github.com/miyako/4d-plugin-mecab-v2/releases/download/mecab-ipadic-utf8-compiled/ipadic.zip)
+
+* [jumandic-utf8-compiled](https://github.com/miyako/4d-plugin-mecab-v2/releases/download/mecab-jumandic-utf8-compiled/jumandic.zip)
+
+```
+C_OBJECT($model)
+$model:=JSON Parse(MeCab Get model ;Is object)
+
+If ($model=Null)
+	
+	$model:=New object
+	$model.dicdir:=Get 4D folder(Current resources folder)+"jumandic"
+	
+	MeCab SET MODEL (JSON Stringify($model))
+	
+end if
+```
+
+コスト自動計算モード（``assignUserDictionaryCosts``）でユーザー辞書を作成するためには
+
+* ``rewrite.def``  
+* ``char.bin``  
+* ``model.bin``  
+* ``feature.def``  
+
+が必要です。
+
+``rewrite.def``と``char.bin``は辞書に含まれています。
+
+``model.bin``と``feature.def``は下記からダウンロードすることができます。
+
+* [mecab-ipadic-utf8-conf](https://github.com/miyako/4d-plugin-mecab-v2/releases/download/mecab-ipadic-utf8-conf/ipadic.utf8.zip)
+
+* [mecab-jumandic-utf8-conf](https://github.com/miyako/4d-plugin-mecab-v2/releases/download/mecab-jumandic-utf8-conf/jumandic.utf8.zip)
+
+システム辞書から``model.bin``を作成するためには，``model.def``が必要です。IPA辞書の学習モデルはmecabやmecab-ipadicのソースコードと一緒に配布されていませんでした。
+
+* [mecab-ipadic-2.7.0-20070801.model](https://github.com/miyako/4d-plugin-mecab-v2/releases/download/ipa-model/mecab-ipadic-2.7.0-20070801.model)
+
 ## Syntax
 
 ```
@@ -36,24 +81,12 @@ model|TEXT|``JSON``
 ``dict[]``: 辞書情報（下記オブジェクトのコレクション）  
 
 ``filename``: 辞書ファイル名 (``Path is POSIX``)  
-``charset``: 文字セット  
+``charset``: 文字セット（``utf8``）  
 ``size``: 登録語数  
 ``type``: ``0`` システム辞書 ``1`` ユーザー辞書 ``2`` 未知語辞書  
 ``lsize``: ``left``属性数  
 ``rsize`` ``right``属性数  
-``version``: 辞書バージョン  
-
-プラグインのResourcesフォルダーには``UTF-8``版の``ipadic``および``jumandic``辞書が収録されています。
-
-## 辞書を切り替えるには
-
-```  
-$model:=JSON Parse(MeCab Get model)
-
-$model.dicdir:=Path to object($model.dicdir;Path is system).parentFolder+"jumandic"
-
-MeCab SET MODEL (JSON Stringify($model))
-```
+``version``: 辞書バージョン（``102``）  
 
 ```
 MeCab SET MODEL (model)
@@ -66,7 +99,7 @@ model|TEXT|``JSON``
 ``dicdir``: システム辞書のディレクトリパス (``Path is system``)  
 ``userdic[]`` or ``userdic``: ユーザー辞書のファイルパス (``Path is system``)  
 
-* ``userdic``には文字列または文字列のコレクションが渡せます。
+* ``userdic``（任意）には，文字列または文字列のコレクションが渡せます。
 
 ```
 result:=MeCab (sentence)
@@ -79,7 +112,7 @@ result|TEXT|``JSON``
 
 形態素分析の結果を返します。（下記オブジェクトのコレクション）
 
-``feature``: 素性（ipadic:品詞,品詞細分類1,品詞細分類2,品詞細分類3,活用形,活用型,原形,読み,発音）  
+``feature``: 素性  
 ``value``: 表層形  
 ``rcAttr``: 右連接状態番号 
 ``lcAttr``: 左連接状態番号
@@ -88,6 +121,20 @@ result|TEXT|``JSON``
 ``char_type``: 文字種ID  
 ``stat``: 形態素種類ID  
 ``isbest``: 最適パス (``true`` ``false``)  
+
+素性CSVのフォーマット，各種IDは辞書依存です。
+
+ipadic: 品詞,品詞細分類1,品詞細分類2,品詞細分類3,活用形,活用型,原形,読み,発音
+
+## 辞書を切り替えるには
+
+```  
+$model:=JSON Parse(MeCab Get model)
+
+$model.dicdir:=Path to object($model.dicdir;Path is system).parentFolder+"jumandic"
+
+MeCab SET MODEL (JSON Stringify($model))
+```
 
 ## 形態素の配列を取り出すには
 
@@ -136,14 +183,11 @@ End for each
 出力ファイルの文字コードはUTF-8固定です。
 
 ``options.buildUnknown``: ``unk.dic``を出力（既定：``false``）  
-``options.buildMatrix``: ``matrix.bin``を出力（既定：``false``, ``matrix``を参照）  
-``options.buildCharCategory``: ``char.bin``を出力（既定：``false``; ``char``, ``unk``を参照）  
+``options.buildMatrix``: ``matrix.bin``を出力（既定：``false``, ``matrix.def``必要）  
+``options.buildCharCategory``: ``char.bin``を出力（既定：``false``; ``char.def``, ``unk.def``必要）  
 ``options.buildSysdic``: ``sys.dic``を出力（既定：``true``）   
-``options.buildModel``: ``model.bin``を出力（既定：``false``; ``model``が無ければ無視）  
-``options.matrix``: ``matrix.def``のファイルパス    
-``options.char``: ``char.def``のファイルパス    
-``options.unk``: ``unk.def``のファイルパス
-``options.model``: ``model.def``のファイルパス  
+``options.buildModel``: ``model.bin``を出力（既定：``false``; ``model.def``必要）      
+``options.model``: ``model.def``のファイルパス（既定：``$(dicdir)/model.def``）    
 
 ``matrix.def``未指定の場合，既定（``1 1\n0 0 0\n``）が使用されます。
 
@@ -152,6 +196,8 @@ End for each
 ``unk.def``未指定の場合，既定（``DEFAULT,0,0,0,*\nSPACE,0,0,0,*\n``）が使用されます。
 
  ``model.bin``を出力する場合，辞書の文字コード（``dictionaryCharset``）は出力ファイルの文字コード（``utf8``）と合致していなければなりません。
+ 
+ システム辞書ファイルとして使用するフォルダーには``dicrc``ファイルがなければなりません。
  
 ```
   //システム辞書を作成する例（ipadic）
@@ -168,31 +214,54 @@ $options:=New object
   //出力SYS.DICフォルダーパス
 $options.outdir:=$dictPath
 
-  //入力CSVファイルのフォルダーパス
+  //入力CSVファイルのフォルダーパス（ダウンロードした辞書のソースファイル群）
 $options.sysdicdir:=System folder(Desktop)+"mecab-ipadic"+Folder separator
+$options.dictionaryCharset:="EUC-JP"  //入力CSVファイルの文字コード
 
-  //設定ファイル（dicrc,matrix.bin,pos-id.def,rewrite.def,left-id.def,right-id.def）の場所
+  //設定ファイルの場所
 $options.dicdir:=Get 4D folder(Current resources folder)+"ipadic"
 $options.configCharset:="EUC-JP"  //設定ファイルの文字コード（ipaはEUC-JP）
-$options.dictionaryCharset:="EUC-JP"  //入力CSVファイルの文字コード（ipaはEUC-JP）
 
-  //出力DICファイルの文字コードはUTF-8固定
+  //作成するファイルの指定　（カッコ内は依存設定ファイル）
+$options.buildUnknown:=True  //unk.dic (unk.def)
+$options.buildMatrix:=True  //matrix.bin (matrix.def)
+$options.buildCharCategory:=True  //char.bin (char.def,unk.def)
+$options.buildModel:=False  //model.bin (model.def)
+$options.buildSysdic:=True  //sys.dic (unk.def)
 
+  //依存設定ファイル
 $options.matrix:=$options.sysdicdir+"matrix.def"  //not matrix.bin
 $options.char:=$options.sysdicdir+"char.def"  //not char.bin
 $options.unk:=$options.sysdicdir+"unk.def"
 $options.model:=$options.sysdicdir+"model.def"  //not model.bin
 
-$options.buildUnknown:=True
-$options.buildMatrix:=True
-$options.buildCharCategory:=True
-$options.buildModel:=False  //ipadicのmodelはどこにあるのだろう
-$options.buildSysdic:=True
-
   //辞書ファイルのコンパイル
 
 $method:="mecab_progress"
 MeCab INDEX DICTIONARY (JSON Stringify($options);$method)
+
+  //辞書設定ファイルのコピー
+COPY DOCUMENT($options.sysdicdir+"dicrc";$options.outdir+"dicrc";*)
+
+If (True)
+	  //なくてもシステム辞書は使用できますが，後でユーザー辞書を作成するときに必要です
+	COPY DOCUMENT($options.sysdicdir+"left-id.def";$options.outdir+"left-id.def";*)
+	COPY DOCUMENT($options.sysdicdir+"pos-id.def";$options.outdir+"pos-id.def";*)
+	COPY DOCUMENT($options.sysdicdir+"rewrite.def";$options.outdir+"rewrite.def";*)
+	COPY DOCUMENT($options.sysdicdir+"right-id.def";$options.outdir+"right-id.def";*)
+	  //自動コスト計算付きでユーザー辞書を作成するときに必要です
+	COPY DOCUMENT($options.sysdicdir+"feature.def";$options.outdir+"feature.def";*)
+End if 
+
+  //システム辞書を使用
+C_OBJECT($model)
+$model:=New object
+$model.dicdir:=$dictPath
+
+MeCab SET MODEL (JSON Stringify($model))
+
+$window:=Open form window("TEST")
+DIALOG("TEST")
 ```
  
 ```
@@ -210,31 +279,54 @@ $options:=New object
   //出力SYS.DICフォルダーパス
 $options.outdir:=$dictPath
 
-  //入力CSVファイルのフォルダーパス
+  //入力CSVファイルのフォルダーパス（ダウンロードした辞書のソースファイル群）
 $options.sysdicdir:=System folder(Desktop)+"mecab-jumandic"+Folder separator
-
-  //設定ファイル（dicrc,matrix.bin,pos-id.def,rewrite.def,left-id.def,right-id.def）の場所
-$options.dicdir:=Get 4D folder(Current resources folder)+"jumandic"
-$options.configCharset:="UTF-8"  //設定ファイルの文字コード（jumanはUTF-8）
 $options.dictionaryCharset:="UTF-8"  //入力CSVファイルの文字コード（jumanはUTF-8）
 
-  //出力DICファイルの文字コードはUTF-8固定
+  //設定ファイルの場所
+$options.dicdir:=Get 4D folder(Current resources folder)+"jumandic"
+$options.configCharset:="UTF-8"  //設定ファイルの文字コード（jumanはUTF-8）
 
-$options.matrix:=$options.sysdicdir+"matrix.def"//not matrix.bin
+  //作成するファイルの指定　（カッコ内は依存設定ファイル）
+$options.buildUnknown:=True  //unk.dic (unk.def)
+$options.buildMatrix:=True  //matrix.bin (matrix.def)
+$options.buildCharCategory:=True  //char.bin (char.def,unk.def)
+$options.buildModel:=True  //model.bin (model.def)
+$options.buildSysdic:=True  //sys.dic (unk.def)
+
+  //依存設定ファイル
+$options.matrix:=$options.sysdicdir+"matrix.def"  //not matrix.bin
 $options.char:=$options.sysdicdir+"char.def"  //not char.bin
 $options.unk:=$options.sysdicdir+"unk.def"
-$options.model:=$options.sysdicdir+"model.def" //not model.bin
-
-$options.buildUnknown:=True
-$options.buildMatrix:=True
-$options.buildCharCategory:=True
-$options.buildModel:=True 
-$options.buildSysdic:=True
+$options.model:=$options.sysdicdir+"model.def"  //not model.bin
 
   //辞書ファイルのコンパイル
 
 $method:="mecab_progress"
 MeCab INDEX DICTIONARY (JSON Stringify($options);$method)
+
+  //辞書設定ファイルのコピー
+COPY DOCUMENT($options.sysdicdir+"dicrc";$options.outdir+"dicrc";*)
+
+If (True)
+	  //なくてもシステム辞書は使用できますが，後でユーザー辞書を作成するときに必要です
+	COPY DOCUMENT($options.sysdicdir+"left-id.def";$options.outdir+"left-id.def";*)
+	COPY DOCUMENT($options.sysdicdir+"pos-id.def";$options.outdir+"pos-id.def";*)
+	COPY DOCUMENT($options.sysdicdir+"rewrite.def";$options.outdir+"rewrite.def";*)
+	COPY DOCUMENT($options.sysdicdir+"right-id.def";$options.outdir+"right-id.def";*)
+	  //自動コスト計算付きでユーザー辞書を作成するときに必要です
+	COPY DOCUMENT($options.sysdicdir+"feature.def";$options.outdir+"feature.def";*)
+End if 
+
+  //システム辞書を使用
+C_OBJECT($model)
+$model:=New object
+$model.dicdir:=$dictPath
+
+MeCab SET MODEL (JSON Stringify($model))
+
+$window:=Open form window("TEST")
+DIALOG("TEST")
 ```
  
 ## ユーザー辞書を作成するには
@@ -244,15 +336,12 @@ MeCab INDEX DICTIONARY (JSON Stringify($options);$method)
 ``options.userdic``: 出力ファイルパス  
 ``options.userdicdir``: 入力フォルダーパス（CSVファイルの場所）  
 ``options.dicdir``: 設定フォルダーパス    
-``options.rewrite``: ``rewrite.def``のファイルパス     
 
 * 任意プロパティ
 
 ``options.assignUserDictionaryCosts``: 自動コスト計算で``.csv``を出力（既定：``false``; ``model``, ``char``, ``feature``を参照）   
-
-``options.model``: ``model.def``または``model.bin``のファイルパス   
-``options.char``: ``char.def``または``char.bin``のファイルパス  
-``options.feature``: ``feature.def``のファイルパス  
+``options.model``: ``model.def``または``model.bin``のファイルパス（既定：``$(dicdir)/model.bin``）   
+``options.feature``: ``feature.def``のファイルパス（既定：``$(dicdir)/feature.def``）  
 
 * ``dicdir``に用意しておくもの（``assignUserDictionaryCosts=true``の場合）
 
@@ -260,6 +349,8 @@ MeCab INDEX DICTIONARY (JSON Stringify($options);$method)
 ``dicrc``  
 ``left-id.def``  
 ``right-id.def``  
+``rewrite.def``  
+``char.bin``  
 
 * ``dicdir``に用意しておくもの（``assignUserDictionaryCosts=false``の場合）
 
@@ -267,6 +358,7 @@ MeCab INDEX DICTIONARY (JSON Stringify($options);$method)
 ``dicrc``  
 ``left-id.def``  
 ``right-id.def``  
+``rewrite.def``  
 ``pos-id.def``  
 
 ## ユーザー辞書を作成するには（自動コスト計算）
@@ -280,7 +372,7 @@ DELETE FOLDER($dictPath;Delete with contents)
 CREATE FOLDER($dictPath;*)
 
   //CSVファイルを作成
-C_COLLECTION($data)
+C_COLLECTION($data;$datum)
 $data:=New collection
 
   //1行目は空データにする（つぎの連結コストがマイナスにならないように）
@@ -300,22 +392,24 @@ TEXT TO DOCUMENT($dictPath+"data.csv";$csv.join("\n");"utf-8";Document unchanged
   //辞書データの設定
 C_OBJECT($options)
 $options:=New object
+
   //出力DICファイルパス
 $options.userdic:=$dictPath+"$"+Generate UUID+".csv"
+
   //入力CSVファイルのフォルダーパス
 $options.userdicdir:=$dictPath
-  //設定ファイル（dicrc,matrix.bin,pos-id.def,rewrite.def,left-id.def,right-id.def）の場所
-  //mecabのソースコードに含まれている設定ファイルはEUC-JPなので使用しない
+$options.dictionaryCharset:="UTF-8"  //入力CSVファイルの文字コード
+
+  //設定ファイルの場所
 $options.dicdir:=Get 4D folder(Current resources folder)+"jumandic"
 $options.configCharset:="UTF-8"  //設定ファイルの文字コード
-$options.dictionaryCharset:="UTF-8"  //入力CSVファイルの文字コード
-  //出力DICファイルの文字コードはUTF-8固定
 
 $options.assignUserDictionaryCosts:=True
-$options.rewrite:=$options.dicdir+Folder separator+"rewrite.def"
-$options.feature:=$options.dicdir+Folder separator+"feature.def"
-$options.char:=$options.dicdir+Folder separator+"char.bin"
-$options.model:=$options.dicdir+Folder separator+"model.bin"
+
+$options.rewrite:=Get 4D folder(Current resources folder)+"jumandic.utf8.rewrite.def"
+$options.char:=Get 4D folder(Current resources folder)+"jumandic.utf8.char.bin"
+$options.model:=Get 4D folder(Current resources folder)+"jumandic.utf8.model.bin"
+$options.feature:=Get 4D folder(Current resources folder)+"jumandic.utf8.feature.def"
 
   //コストの自動計算
 $method:="mecab_progress"
@@ -324,7 +418,7 @@ MeCab INDEX DICTIONARY (JSON Stringify($options);$method)
 MOVE DOCUMENT($dictPath+"data.csv";$dictPath+"data.txt")
 MOVE DOCUMENT($options.userdic;$dictPath+"data.csv")
 
-$options.assignUserDictionaryCosts:=True
+$options.assignUserDictionaryCosts:=False  //コストの自動計算モードをここでオフにする
 $options.userdic:=$dictPath+"data.dic"
 
   //辞書ファイルの作成
@@ -333,11 +427,14 @@ MeCab INDEX DICTIONARY (JSON Stringify($options);$method)
   //システム辞書＋ユーザー辞書を使用
 C_OBJECT($model)
 $model:=New object
-$model.dicdir:=Path to object(JSON Parse(MeCab Get model ).dicdir;Path is system).parentFolder+"jumandic"
+$model.dicdir:=Get 4D folder(Current resources folder)+"jumandic"
 $model.userdic:=$options.userdic
 
 MeCab SET MODEL (JSON Stringify($model))
 $model:=JSON Parse(MeCab Get model )
+
+$window:=Open form window("TEST")
+DIALOG("TEST")
 ```
 
 ## ユーザー辞書を作成するには（モデル無し）
@@ -351,7 +448,7 @@ DELETE FOLDER($dictPath;Delete with contents)
 CREATE FOLDER($dictPath;*)
 
   //CSVファイルを作成
-C_COLLECTION($data)
+C_COLLECTION($data;$datum)
 $data:=New collection
 
   //1行目は空データにする（つぎの連結コストがマイナスにならないように）
@@ -371,16 +468,17 @@ TEXT TO DOCUMENT($dictPath+"data.csv";$csv.join("\n");"utf-8";Document unchanged
   //辞書データの設定
 C_OBJECT($options)
 $options:=New object
+
   //出力DICファイルパス
 $options.userdic:=$dictPath+"data.dic"
+
   //入力CSVファイルのフォルダーパス
 $options.userdicdir:=$dictPath
-  //設定ファイル（dicrc,matrix.bin,pos-id.def,rewrite.def,left-id.def,right-id.def）の場所
-  //mecabのソースコードに含まれている設定ファイルはEUC-JPなので使用しない
+$options.dictionaryCharset:="UTF-8"  //入力CSVファイルの文字コード
+
+  //設定ファイルの場所
 $options.dicdir:=Get 4D folder(Current resources folder)+"ipadic"
 $options.configCharset:="UTF-8"  //設定ファイルの文字コード
-$options.dictionaryCharset:="UTF-8"  //入力CSVファイルの文字コード
-  //出力DICファイルの文字コードはUTF-8固定
 
 $options.assignUserDictionaryCosts:=False
 $options.rewrite:=$options.dicdir+Folder separator+"rewrite.def"
@@ -392,8 +490,11 @@ MeCab INDEX DICTIONARY (JSON Stringify($options);$method)
   //システム辞書＋ユーザー辞書を使用
 C_OBJECT($model)
 $model:=New object
-$model.dicdir:=Path to object(JSON Parse(MeCab Get model ).dicdir;Path is system).parentFolder+"ipadic"
+$model.dicdir:=Get 4D folder(Current resources folder)+"ipadic"
 $model.userdic:=$options.userdic
 MeCab SET MODEL (JSON Stringify($model))
 $model:=JSON Parse(MeCab Get model )
+
+$window:=Open form window("TEST")
+DIALOG("TEST")
 ```
