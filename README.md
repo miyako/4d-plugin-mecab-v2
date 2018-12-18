@@ -385,10 +385,11 @@ $options.dictionaryCharset:="UTF-8"  //入力CSVファイルの文字コード
   //出力DICファイルの文字コードはUTF-8固定
 
 $options.assignUserDictionaryCosts:=True
-$options.rewrite:=$options.dicdir+Folder separator+"rewrite.def"
-$options.feature:=$options.dicdir+Folder separator+"feature.def"
-$options.char:=$options.dicdir+Folder separator+"char.bin"
-$options.model:=$options.dicdir+Folder separator+"model.bin"
+
+$options.rewrite:=Get 4D folder(Current resources folder)+"jumandic.utf8.rewrite.def"
+$options.char:=Get 4D folder(Current resources folder)+"jumandic.utf8.char.bin"
+$options.model:=Get 4D folder(Current resources folder)+"jumandic.utf8.model.bin"
+$options.feature:=Get 4D folder(Current resources folder)+"jumandic.utf8.feature.def"
 
   //コストの自動計算
 $method:="mecab_progress"
