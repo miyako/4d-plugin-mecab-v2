@@ -19,6 +19,10 @@ use [carbon] branch for 32-bit support
 
 [1.0]
 
+### Install
+
+[ipadic](https://github.com/miyako/4d-plugin-mecab-v2/releases/tag/ipadic)
+
 ## Syntax
 
 ```
