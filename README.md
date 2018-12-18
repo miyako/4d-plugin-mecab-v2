@@ -67,16 +67,6 @@ model|TEXT|``JSON``
 ``rsize`` ``right``属性数  
 ``version``: 辞書バージョン（``102``）  
 
-## 辞書を切り替えるには
-
-```  
-$model:=JSON Parse(MeCab Get model)
-
-$model.dicdir:=Path to object($model.dicdir;Path is system).parentFolder+"jumandic"
-
-MeCab SET MODEL (JSON Stringify($model))
-```
-
 ```
 MeCab SET MODEL (model)
 ```
@@ -114,6 +104,16 @@ result|TEXT|``JSON``
 素性CSVのフォーマット，各種IDは辞書依存です。
 
 ipadic: 品詞,品詞細分類1,品詞細分類2,品詞細分類3,活用形,活用型,原形,読み,発音
+
+## 辞書を切り替えるには
+
+```  
+$model:=JSON Parse(MeCab Get model)
+
+$model.dicdir:=Path to object($model.dicdir;Path is system).parentFolder+"jumandic"
+
+MeCab SET MODEL (JSON Stringify($model))
+```
 
 ## 形態素の配列を取り出すには
 
