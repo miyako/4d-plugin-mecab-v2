@@ -168,7 +168,7 @@ End for each
 ``options.buildModel``: ``model.bin``を出力（既定：``false``; ``model``が無ければ無視）  
 ``options.matrix``: ``matrix.def``のファイルパス    
 ``options.char``: ``char.def``のファイルパス    
-``options.unk``: ``unk.def``のファイルパス
+``options.unk``: ``unk.def``のファイルパス  
 ``options.model``: ``model.def``のファイルパス  
 
 ``matrix.def``未指定の場合，既定（``1 1\n0 0 0\n``）が使用されます。
