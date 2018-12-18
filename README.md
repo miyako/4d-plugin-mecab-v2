@@ -225,12 +225,14 @@ MeCab INDEX DICTIONARY (JSON Stringify($options);$method)
   //辞書設定ファイルのコピー
 COPY DOCUMENT($options.sysdicdir+"dicrc";$options.outdir+"dicrc";*)
 
-If (False)
-	  //なくてもOK
+If (True)
+	  //なくてもシステム辞書は使用できますが，後でユーザー辞書を作成するときに必要です
 	COPY DOCUMENT($options.sysdicdir+"left-id.def";$options.outdir+"left-id.def";*)
 	COPY DOCUMENT($options.sysdicdir+"pos-id.def";$options.outdir+"pos-id.def";*)
 	COPY DOCUMENT($options.sysdicdir+"rewrite.def";$options.outdir+"rewrite.def";*)
 	COPY DOCUMENT($options.sysdicdir+"right-id.def";$options.outdir+"right-id.def";*)
+	  //自動コスト計算付きでユーザー辞書を作成するときに必要です
+	COPY DOCUMENT($options.sysdicdir+"right-id.def";$options.outdir+"feature.def";*)
 End if 
 
   //システム辞書を使用
@@ -288,12 +290,14 @@ MeCab INDEX DICTIONARY (JSON Stringify($options);$method)
   //辞書設定ファイルのコピー
 COPY DOCUMENT($options.sysdicdir+"dicrc";$options.outdir+"dicrc";*)
 
-If (False)
-	  //なくてもOK
+If (True)
+	  //なくてもシステム辞書は使用できますが，後でユーザー辞書を作成するときに必要です
 	COPY DOCUMENT($options.sysdicdir+"left-id.def";$options.outdir+"left-id.def";*)
 	COPY DOCUMENT($options.sysdicdir+"pos-id.def";$options.outdir+"pos-id.def";*)
 	COPY DOCUMENT($options.sysdicdir+"rewrite.def";$options.outdir+"rewrite.def";*)
 	COPY DOCUMENT($options.sysdicdir+"right-id.def";$options.outdir+"right-id.def";*)
+	  //自動コスト計算付きでユーザー辞書を作成するときに必要です
+	COPY DOCUMENT($options.sysdicdir+"right-id.def";$options.outdir+"feature.def";*)
 End if 
 
   //システム辞書を使用
