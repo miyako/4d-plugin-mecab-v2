@@ -21,6 +21,24 @@ use [carbon] branch for 32-bit support
 
 ### Install
 
+プラグインには辞書ファイルが含まれていません。
+
+下記のファイルをダウンロードしておき，スタートアップで``MeCab SET MODEL``を実行してください。
+
+```
+C_OBJECT($model)
+$model:=JSON Parse(MeCab Get model ;Is object)
+
+If ($model=Null)
+	
+	$model:=New object
+	$model.dicdir:=Get 4D folder(Current resources folder)+"jumandic"
+	
+	MeCab SET MODEL (JSON Stringify($model))
+	
+end if
+```
+
 [ipadic](https://github.com/miyako/4d-plugin-mecab-v2/releases/tag/ipadic)
 
 [jumandic](https://github.com/miyako/4d-plugin-mecab-v2/releases/tag/jumandic)
