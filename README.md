@@ -259,6 +259,52 @@ $options:=New object
   //出力SYS.DICフォルダーパス
 $options.outdir:=$dictPath
 
+  //入力CSVファイルのフォルダーパス（ダウンロードした辞書のソースファイル群）
+$options.sysdicdir:=System folder(Desktop)+"mecab-jumandic"+Folder separator
+$options.dictionaryCharset:="UTF-8"  //入力CSVファイルの文字コード（jumanはUTF-8）
+
+  //設定ファイルの場所
+$options.dicdir:=Get 4D folder(Current resources folder)+"jumandic"
+$options.configCharset:="UTF-8"  //設定ファイルの文字コード（jumanはUTF-8）
+
+  //作成するファイルの指定　（カッコ内は依存設定ファイル）
+$options.buildUnknown:=True  //unk.dic (unk.def)
+$options.buildMatrix:=True  //matrix.bin (matrix.def)
+$options.buildCharCategory:=True  //char.bin (char.def,unk.def)
+$options.buildModel:=True  //model.bin (model.def)
+$options.buildSysdic:=True  //sys.dic (unk.def)
+
+  //依存設定ファイル
+$options.matrix:=$options.sysdicdir+"matrix.def"  //not matrix.bin
+$options.char:=$options.sysdicdir+"char.def"  //not char.bin
+$options.unk:=$options.sysdicdir+"unk.def"
+$options.model:=$options.sysdicdir+"model.def"  //not model.bin
+
+  //辞書ファイルのコンパイル
+
+$method:="mecab_progress"
+MeCab INDEX DICTIONARY (JSON Stringify($options);$method)
+
+  //辞書設定ファイルのコピー
+COPY DOCUMENT($options.sysdicdir+"dicrc";$options.outdir+"dicrc";*)
+
+If (False)
+	  //なくてもOK
+	COPY DOCUMENT($options.sysdicdir+"left-id.def";$options.outdir+"left-id.def";*)
+	COPY DOCUMENT($options.sysdicdir+"pos-id.def";$options.outdir+"pos-id.def";*)
+	COPY DOCUMENT($options.sysdicdir+"rewrite.def";$options.outdir+"rewrite.def";*)
+	COPY DOCUMENT($options.sysdicdir+"right-id.def";$options.outdir+"right-id.def";*)
+End if 
+
+  //システム辞書を使用
+C_OBJECT($model)
+$model:=New object
+$model.dicdir:=$dictPath
+
+MeCab SET MODEL (JSON Stringify($model))
+
+$window:=Open form window("TEST")
+DIALOG("TEST")
 ```
  
 ## ユーザー辞書を作成するには
