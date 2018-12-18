@@ -47,6 +47,10 @@ end if
 
 [jumandic-utf8](https://github.com/miyako/4d-plugin-mecab-v2/releases/tag/jumandic-utf8)
 
+システム辞書から``model.bin``を作成するためには，``model.def``が必要です。IPA辞書の学習モデルはmecabやmecab-ipadicのソースコードと一緒に配布されていません。
+
+[ipadic-model](mecab-ipadic-2.7.0-20070801.model)
+
 ## Syntax
 
 ```
