@@ -236,7 +236,7 @@ If (True)
 	COPY DOCUMENT($options.sysdicdir+"rewrite.def";$options.outdir+"rewrite.def";*)
 	COPY DOCUMENT($options.sysdicdir+"right-id.def";$options.outdir+"right-id.def";*)
 	  //自動コスト計算付きでユーザー辞書を作成するときに必要です
-	COPY DOCUMENT($options.sysdicdir+"right-id.def";$options.outdir+"feature.def";*)
+	COPY DOCUMENT($options.sysdicdir+"feature.def";$options.outdir+"feature.def";*)
 End if 
 
   //システム辞書を使用
@@ -301,7 +301,7 @@ If (True)
 	COPY DOCUMENT($options.sysdicdir+"rewrite.def";$options.outdir+"rewrite.def";*)
 	COPY DOCUMENT($options.sysdicdir+"right-id.def";$options.outdir+"right-id.def";*)
 	  //自動コスト計算付きでユーザー辞書を作成するときに必要です
-	COPY DOCUMENT($options.sysdicdir+"right-id.def";$options.outdir+"feature.def";*)
+	COPY DOCUMENT($options.sysdicdir+"feature.def";$options.outdir+"feature.def";*)
 End if 
 
   //システム辞書を使用
