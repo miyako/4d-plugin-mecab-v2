@@ -398,7 +398,7 @@ MeCab INDEX DICTIONARY (JSON Stringify($options);$method)
 MOVE DOCUMENT($dictPath+"data.csv";$dictPath+"data.txt")
 MOVE DOCUMENT($options.userdic;$dictPath+"data.csv")
 
-$options.assignUserDictionaryCosts:=True
+$options.assignUserDictionaryCosts:=False  //コストの自動計算モードをここでオフにする
 $options.userdic:=$dictPath+"data.dic"
 
   //辞書ファイルの作成
