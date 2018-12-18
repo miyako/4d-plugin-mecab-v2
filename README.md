@@ -183,14 +183,11 @@ End for each
 出力ファイルの文字コードはUTF-8固定です。
 
 ``options.buildUnknown``: ``unk.dic``を出力（既定：``false``）  
-``options.buildMatrix``: ``matrix.bin``を出力（既定：``false``, ``matrix``を参照）  
-``options.buildCharCategory``: ``char.bin``を出力（既定：``false``; ``char``, ``unk``を参照）  
+``options.buildMatrix``: ``matrix.bin``を出力（既定：``false``, ``matrix.def``必要）  
+``options.buildCharCategory``: ``char.bin``を出力（既定：``false``; ``char.def``, ``unk.def``必要）  
 ``options.buildSysdic``: ``sys.dic``を出力（既定：``true``）   
-``options.buildModel``: ``model.bin``を出力（既定：``false``; ``model``が無ければ無視）  
-``options.matrix``: ``matrix.def``のファイルパス    
-``options.char``: ``char.def``のファイルパス    
-``options.unk``: ``unk.def``のファイルパス  
-``options.model``: ``model.def``のファイルパス  
+``options.buildModel``: ``model.bin``を出力（既定：``false``; ``model.def``必要）      
+``options.model``: ``model.def``のファイルパス（既定：``$(dicdir)/model.def``）    
 
 ``matrix.def``未指定の場合，既定（``1 1\n0 0 0\n``）が使用されます。
 
@@ -339,13 +336,11 @@ DIALOG("TEST")
 ``options.userdic``: 出力ファイルパス  
 ``options.userdicdir``: 入力フォルダーパス（CSVファイルの場所）  
 ``options.dicdir``: 設定フォルダーパス    
-``options.rewrite``: ``rewrite.def``のファイルパス（既定：``$(dicdir)/rewrite.def``）     
 
 * 任意プロパティ
 
 ``options.assignUserDictionaryCosts``: 自動コスト計算で``.csv``を出力（既定：``false``; ``model``, ``char``, ``feature``を参照）   
 ``options.model``: ``model.def``または``model.bin``のファイルパス（既定：``$(dicdir)/model.bin``）   
-``options.char``: ``char.def``または``char.bin``のファイルパス（既定：``$(dicdir)/char.bin``）  
 ``options.feature``: ``feature.def``のファイルパス（既定：``$(dicdir)/feature.def``）  
 
 * ``dicdir``に用意しておくもの（``assignUserDictionaryCosts=true``の場合）
@@ -354,6 +349,8 @@ DIALOG("TEST")
 ``dicrc``  
 ``left-id.def``  
 ``right-id.def``  
+``rewrite.def``  
+``char.bin``  
 
 * ``dicdir``に用意しておくもの（``assignUserDictionaryCosts=false``の場合）
 
@@ -361,6 +358,7 @@ DIALOG("TEST")
 ``dicrc``  
 ``left-id.def``  
 ``right-id.def``  
+``rewrite.def``  
 ``pos-id.def``  
 
 ## ユーザー辞書を作成するには（自動コスト計算）
