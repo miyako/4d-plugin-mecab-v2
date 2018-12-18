@@ -383,16 +383,17 @@ TEXT TO DOCUMENT($dictPath+"data.csv";$csv.join("\n");"utf-8";Document unchanged
   //辞書データの設定
 C_OBJECT($options)
 $options:=New object
+
   //出力DICファイルパス
 $options.userdic:=$dictPath+"$"+Generate UUID+".csv"
+
   //入力CSVファイルのフォルダーパス
 $options.userdicdir:=$dictPath
-  //設定ファイル（dicrc,matrix.bin,pos-id.def,rewrite.def,left-id.def,right-id.def）の場所
-  //mecabのソースコードに含まれている設定ファイルはEUC-JPなので使用しない
+$options.dictionaryCharset:="UTF-8"  //入力CSVファイルの文字コード
+
+  //設定ファイルの場所
 $options.dicdir:=Get 4D folder(Current resources folder)+"jumandic"
 $options.configCharset:="UTF-8"  //設定ファイルの文字コード
-$options.dictionaryCharset:="UTF-8"  //入力CSVファイルの文字コード
-  //出力DICファイルの文字コードはUTF-8固定
 
 $options.assignUserDictionaryCosts:=True
 
@@ -458,16 +459,17 @@ TEXT TO DOCUMENT($dictPath+"data.csv";$csv.join("\n");"utf-8";Document unchanged
   //辞書データの設定
 C_OBJECT($options)
 $options:=New object
+
   //出力DICファイルパス
 $options.userdic:=$dictPath+"data.dic"
+
   //入力CSVファイルのフォルダーパス
 $options.userdicdir:=$dictPath
-  //設定ファイル（dicrc,matrix.bin,pos-id.def,rewrite.def,left-id.def,right-id.def）の場所
-  //mecabのソースコードに含まれている設定ファイルはEUC-JPなので使用しない
+$options.dictionaryCharset:="UTF-8"  //入力CSVファイルの文字コード
+
+  //設定ファイルの場所
 $options.dicdir:=Get 4D folder(Current resources folder)+"ipadic"
 $options.configCharset:="UTF-8"  //設定ファイルの文字コード
-$options.dictionaryCharset:="UTF-8"  //入力CSVファイルの文字コード
-  //出力DICファイルの文字コードはUTF-8固定
 
 $options.assignUserDictionaryCosts:=False
 $options.rewrite:=$options.dicdir+Folder separator+"rewrite.def"
