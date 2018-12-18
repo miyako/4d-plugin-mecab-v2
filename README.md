@@ -43,6 +43,10 @@ end if
 
 [jumandic](https://github.com/miyako/4d-plugin-mecab-v2/releases/tag/jumandic)
 
+コスト自動計算モード（``assignUserDictionaryCosts``）でユーザー辞書を作成するためには，``rewrite.def``, ``char.bin``, ``model.bin``, ``feature.def``が必要です。
+
+[jumandic-utf8](https://github.com/miyako/4d-plugin-mecab-v2/releases/tag/jumandic-utf8)
+
 ## Syntax
 
 ```
