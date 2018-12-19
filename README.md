@@ -27,7 +27,7 @@ use [carbon] branch for 32-bit support
 
 下記のファイルをダウンロードしておき，スタートアップで``MeCab SET MODEL``を実行してください。
 
-サンプルプログラム（システム辞書を作成する例）は，これらのフォルダーがデスクトップにあるという前提で書かれています。  
+サンプルプログラムのResourcesフォルダーには，これらのファイルが含まれています。  
 
 * [ipadic-utf8-compiled](https://github.com/miyako/4d-plugin-mecab-v2/releases/download/mecab-ipadic-utf8-compiled/ipadic.zip)
 
@@ -60,7 +60,7 @@ end if
 
 ``model.bin``と``feature.def``は下記からダウンロードすることができます。
 
-サンプルプログラム（ユーザー辞書を作成する例）は，これらのファイルがResourcesフォルダーにあるという前提で書かれています。
+サンプルプログラムのResourcesフォルダーには，これらのファイルが含まれています。  
 
 * [mecab-ipadic-utf8-conf](https://github.com/miyako/4d-plugin-mecab-v2/releases/download/mecab-ipadic-utf8-conf/ipadic.utf8.zip)
 
@@ -69,6 +69,14 @@ end if
 システム辞書から``model.bin``を作成するためには，``model.def``が必要です。IPA辞書の学習モデルはmecabやmecab-ipadicのソースコードと一緒に配布されていませんでした。
 
 * [mecab-ipadic-2.7.0-20070801.model](https://github.com/miyako/4d-plugin-mecab-v2/releases/download/ipa-model/mecab-ipadic-2.7.0-20070801.model)
+
+システム辞書を作成するには，CSVファイルおよび設定ファイル群が必要です。公式版IPA辞書のように，EUC-JPのCSVから作成することもできますが，その場合，モデルファイルもEUC-JPとなるため，コスト自動計算モードでユーザー辞書を作成することができません。UTF-8版のCSVファイルは，下記からダウンロードすることができます。
+
+なお，サンプルプログラムは，これらのファイルがデスクトップにあるという前提で書かれています。
+
+(https://github.com/miyako/4d-plugin-mecab-v2/releases/download/mecab-jumandic-utf8-erc/mecab-jumandic-utf8.zip)
+
+(https://github.com/miyako/4d-plugin-mecab-v2/releases/download/mecab-ipadic-utf8-src/mecab-ipadic-utf8.zip)
 
 ## Syntax
 
