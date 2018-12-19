@@ -168,7 +168,7 @@ End for each
 <img width="800" alt="2018-12-17 11 30 13" src="https://user-images.githubusercontent.com/1725068/50063356-64b66f80-01ef-11e9-901f-a07ebd8c17b5.png">
 
 ```
-MeCab INDEX DICTIONARY (options)
+MeCab INDEX DICTIONARY (options{;method})
 ```
 
 Parameter|Type|Description
