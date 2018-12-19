@@ -86,9 +86,9 @@ end if
 
 なお，サンプルプログラムは，これらのファイルがデスクトップにあるという前提で書かれています。
 
-(https://github.com/miyako/4d-plugin-mecab-v2/releases/download/mecab-jumandic-utf8-erc/mecab-jumandic-utf8.zip)
+* [mecab-jumandic-utf8.zip](https://github.com/miyako/4d-plugin-mecab-v2/releases/download/mecab-jumandic-utf8-erc/mecab-jumandic-utf8.zip)
 
-(https://github.com/miyako/4d-plugin-mecab-v2/releases/download/mecab-ipadic-utf8-src/mecab-ipadic-utf8.zip)
+* [mecab-ipadic-utf8.zip](https://github.com/miyako/4d-plugin-mecab-v2/releases/download/mecab-ipadic-utf8-src/mecab-ipadic-utf8.zip)
 
 ## Syntax
 
