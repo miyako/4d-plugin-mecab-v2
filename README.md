@@ -1,6 +1,18 @@
 # 4d-plugin-mecab-v2
 4D implementation of [MeCab](http://taku910.github.io/mecab/)
 
+### できること
+
+* システム辞書のコンパイル（コールバックメソッド付き）
+
+* ユーザー辞書のコンパイル（コールバックメソッド付き）
+
+* 辞書の切り替え（システム辞書１＋任意数のユーザー辞書）
+
+### TODO
+
+[オリジナル辞書/コーパスからのパラメータ推定](https://taku910.github.io/mecab/learn.html)に必要な``mecab-cost-train``および``mecab-dict-gen``に相当するコマンド
+
 ### Platform
 
 | carbon | cocoa | win32 | win64 |
