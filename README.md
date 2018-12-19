@@ -1,11 +1,23 @@
 # 4d-plugin-mecab-v2
 4D implementation of [MeCab](http://taku910.github.io/mecab/)
 
+### できること
+
+* システム辞書のコンパイル（コールバックメソッド付き）
+
+* ユーザー辞書のコンパイル（コールバックメソッド付き）
+
+* 辞書の切り替え（システム辞書１＋任意数のユーザー辞書）
+
+### TODO
+
+[オリジナル辞書/コーパスからのパラメータ推定](https://taku910.github.io/mecab/learn.html)に必要な``mecab-cost-train``および``mecab-dict-gen``に相当するコマンド
+
 ### Platform
 
 | carbon | cocoa | win32 | win64 |
 |:------:|:-----:|:---------:|:---------:|
-|<img src="https://cloud.githubusercontent.com/assets/1725068/22371562/1b091f0a-e4db-11e6-8458-8653954a7cce.png" width="24" height="24" />|<img src="https://cloud.githubusercontent.com/assets/1725068/22371562/1b091f0a-e4db-11e6-8458-8653954a7cce.png" width="24" height="24" />|||
+|<img src="https://cloud.githubusercontent.com/assets/1725068/22371562/1b091f0a-e4db-11e6-8458-8653954a7cce.png" width="24" height="24" />|<img src="https://cloud.githubusercontent.com/assets/1725068/22371562/1b091f0a-e4db-11e6-8458-8653954a7cce.png" width="24" height="24" />|<img src="https://cloud.githubusercontent.com/assets/1725068/22371562/1b091f0a-e4db-11e6-8458-8653954a7cce.png" width="24" height="24" />|<img src="https://cloud.githubusercontent.com/assets/1725068/22371562/1b091f0a-e4db-11e6-8458-8653954a7cce.png" width="24" height="24" />|
 
 use [carbon] branch for 32-bit support
 
@@ -17,13 +29,17 @@ use [carbon] branch for 32-bit support
 
 ### Releases
 
-[1.0](https://github.com/miyako/4d-plugin-mecab-v2/releases/tag/0.1) 
+[1.0](https://github.com/miyako/4d-plugin-mecab-v2/releases/tag/0.1-db) サンプルプログラム＋プラグイン  
+
+[1.0](https://github.com/miyako/4d-plugin-mecab-v2/releases/tag/0.1) プラグインのみ  
 
 ## Install
 
 プラグインには辞書ファイルが含まれていません。
 
 下記のファイルをダウンロードしておき，スタートアップで``MeCab SET MODEL``を実行してください。
+
+サンプルプログラムのResourcesフォルダーには，これらのファイルが含まれています。  
 
 * [ipadic-utf8-compiled](https://github.com/miyako/4d-plugin-mecab-v2/releases/download/mecab-ipadic-utf8-compiled/ipadic.zip)
 
@@ -56,6 +72,8 @@ end if
 
 ``model.bin``と``feature.def``は下記からダウンロードすることができます。
 
+サンプルプログラムのResourcesフォルダーには，これらのファイルが含まれています。  
+
 * [mecab-ipadic-utf8-conf](https://github.com/miyako/4d-plugin-mecab-v2/releases/download/mecab-ipadic-utf8-conf/ipadic.utf8.zip)
 
 * [mecab-jumandic-utf8-conf](https://github.com/miyako/4d-plugin-mecab-v2/releases/download/mecab-jumandic-utf8-conf/jumandic.utf8.zip)
@@ -63,6 +81,14 @@ end if
 システム辞書から``model.bin``を作成するためには，``model.def``が必要です。IPA辞書の学習モデルはmecabやmecab-ipadicのソースコードと一緒に配布されていませんでした。
 
 * [mecab-ipadic-2.7.0-20070801.model](https://github.com/miyako/4d-plugin-mecab-v2/releases/download/ipa-model/mecab-ipadic-2.7.0-20070801.model)
+
+システム辞書を作成するには，CSVファイルおよび設定ファイル群が必要です。公式版IPA辞書のように，EUC-JPのCSVから作成することもできますが，その場合，モデルファイルもEUC-JPとなるため，コスト自動計算モードでユーザー辞書を作成することができません。UTF-8版のCSVファイルは，下記からダウンロードすることができます。
+
+なお，サンプルプログラムは，これらのファイルがデスクトップにあるという前提で書かれています。
+
+(https://github.com/miyako/4d-plugin-mecab-v2/releases/download/mecab-jumandic-utf8-erc/mecab-jumandic-utf8.zip)
+
+(https://github.com/miyako/4d-plugin-mecab-v2/releases/download/mecab-ipadic-utf8-src/mecab-ipadic-utf8.zip)
 
 ## Syntax
 
