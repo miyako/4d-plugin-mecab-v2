@@ -27,6 +27,8 @@ use [carbon] branch for 32-bit support
 
 下記のファイルをダウンロードしておき，スタートアップで``MeCab SET MODEL``を実行してください。
 
+サンプルプログラム（システム辞書を作成する例）は，これらのフォルダーがデスクトップにあるという前提で書かれています。  
+
 * [ipadic-utf8-compiled](https://github.com/miyako/4d-plugin-mecab-v2/releases/download/mecab-ipadic-utf8-compiled/ipadic.zip)
 
 * [jumandic-utf8-compiled](https://github.com/miyako/4d-plugin-mecab-v2/releases/download/mecab-jumandic-utf8-compiled/jumandic.zip)
@@ -57,6 +59,8 @@ end if
 ``rewrite.def``と``char.bin``は辞書に含まれています。
 
 ``model.bin``と``feature.def``は下記からダウンロードすることができます。
+
+サンプルプログラム（ユーザー辞書を作成する例）は，これらのファイルがResourcesフォルダーにあるという前提で書かれています。
 
 * [mecab-ipadic-utf8-conf](https://github.com/miyako/4d-plugin-mecab-v2/releases/download/mecab-ipadic-utf8-conf/ipadic.utf8.zip)
 
