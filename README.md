@@ -167,6 +167,95 @@ End for each
 
 <img width="800" alt="2018-12-17 11 30 13" src="https://user-images.githubusercontent.com/1725068/50063356-64b66f80-01ef-11e9-901f-a07ebd8c17b5.png">
 
+```
+MeCab INDEX DICTIONARY (options)
+```
+
+Parameter|Type|Description
+------------|------------|----
+model|TEXT|``JSON``
+method|TEXT|callback (TEXT;LONGINT;LONGINT;LONGINT)
+
+システム辞書またはユーザー辞書を作成します。``mecab-dict-index``のようなものです。
+
+## コールバックメソッドの例
+
+```
+C_TEXT($1;$message)
+C_LONGINT($2;$event;$3;$current;$4;$total)
+C_BOOLEAN($0;$abort)
+
+$event:=$2
+
+Case of 
+	: ($event=1)  //open file
+		
+		$message:="open "+$1
+		MESSAGE($message)
+		
+	: ($event=2)  //create file
+		
+		$message:="create "+$1
+		MESSAGE($message)
+		
+	: ($event=3)  //emit double array
+		
+		$message:="emitting double array "+String($3)+"/"+String($4)
+		MESSAGE($message)
+		
+	: ($event=4)  //emit matrix
+		
+		$message:="emitting matrix "+String($3)+"x"+String($4)
+		MESSAGE($message)
+		
+	: ($event=-1)
+		
+		$message:="missing "+$1
+		MESSAGE($message)
+		
+	: ($event=-2)
+		
+		$message:="missing csv "+$1
+		MESSAGE($message)
+		
+	: ($event=-3)
+		
+		$message:="invalid model "+$1
+		MESSAGE($message)
+		
+	: ($event=-4)
+		
+		$message:="invalid csv "+$1
+		MESSAGE($message)
+		
+	: ($event=5)  //error open file
+		
+		$message:="error open "+$1
+		MESSAGE($message)
+		
+	: ($event=6)  //error create file
+		
+		$message:="error create "+$1
+		MESSAGE($message)
+		
+	: ($event=-7)
+		
+		$message:="invalid def "+$1
+		MESSAGE($message)
+		
+	: ($event=-8)
+		
+		$message:="invalid dicrc "+$1
+		MESSAGE($message)
+		
+	: ($event=-9)
+		
+		$message:="error write "+$1
+		MESSAGE($message)
+		
+End case 
+```
+
 ## システム辞書を作成するには
 
 * 必須プロパティ
