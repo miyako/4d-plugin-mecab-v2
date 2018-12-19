@@ -17,6 +17,8 @@ use [carbon] branch for 32-bit support
 
 ### Releases
 
+[1.0](https://github.com/miyako/4d-plugin-mecab-v2/releases/tag/0.1-db) サンプルプログラム＋プラグイン  
+
 [1.0](https://github.com/miyako/4d-plugin-mecab-v2/releases/tag/0.1) プラグインのみ  
 
 ## Install
