@@ -202,10 +202,32 @@ void GetResourceDir(std::string &resourcedir)
     {
         resourcedir = (const char *)[[bundle resourcePath]UTF8String];
     }
+	resourcedir += '/';
 #else
-    
+	wchar_t	fDrive[_MAX_DRIVE], fDir[_MAX_DIR], fName[_MAX_FNAME], fExt[_MAX_EXT];
+	wchar_t	libmecabPath[_MAX_PATH] = { 0 };
+
+	HMODULE libmecab = GetModuleHandleW(L"MeCab.4DX");
+	if (libmecab) {
+		if (GetModuleFileNameW(libmecab, libmecabPath, _MAX_PATH)) 
+		{
+			_wsplitpath_s(libmecabPath, fDrive, fDir, fName, fExt);
+			std::wstring libmecabParentPath = std::wstring(fDrive) + std::wstring(fDir);
+
+			_wsplitpath_s(libmecabParentPath.substr(0, libmecabParentPath.length()-1).c_str(), fDrive, fDir, fName, fExt);
+			std::wstring libmecabPath = std::wstring(fDrive) + std::wstring(fDir);
+
+			int len = WideCharToMultiByte(CP_UTF8, 0, libmecabPath.c_str(), -1, NULL, 0, NULL, NULL);
+			if (len) {
+				std::vector<uint8_t> buf(len);
+				if (WideCharToMultiByte(CP_UTF8, 0, libmecabPath.c_str(), libmecabPath.size(), (LPSTR)&buf[0], len, NULL, NULL)) {
+					resourcedir =  std::string((const char *)&buf[0]) + "Resources";
+				}
+			}
+		}
+	}
+	resourcedir += '\\';
 #endif
-    resourcedir += '/';
 }
 
 void GetRcFile(std::string &rcfile)
@@ -615,12 +637,13 @@ void enum_csv_dictionaries(std::string& path,
                            std::vector<std::string>& dics)
 {
     dics.clear();
-    
-    std::string dicdir = path;
-    if(dicdir.length() == 0) dicdir = '/';
-    if(dicdir.at(dicdir.size() - 1) != '/') dicdir += '/';
-    
+        
 #if VERSIONMAC
+
+	std::string dicdir = path;
+	if (dicdir.length() == 0) dicdir = '/';
+	if (dicdir.at(dicdir.size() - 1) != '/') dicdir += '/';
+
     NSString *pathString = (NSString *)CFStringCreateWithFileSystemRepresentation(kCFAllocatorDefault, path.c_str());
     NSFileManager *fm = [[NSFileManager alloc]init];
     BOOL isDirectory = YES;
@@ -642,12 +665,20 @@ void enum_csv_dictionaries(std::string& path,
         [fm release];
     }
 #else
+
+	std::string dicdir = path;
+	if (dicdir.length() == 0) dicdir = '\\';
+	if (dicdir.at(dicdir.size() - 1) != '\\') dicdir += '\\';
+
     C_TEXT t;
     t.setUTF8String((const uint8_t *)path.c_str(), path.length());
     CUTF16String path_w;
     t.copyUTF16String(&path_w);
     WIN32_FIND_DATA find;
-    HANDLE h = FindFirstFile(path_w.c_str(), &find);
+
+	path_w += L'*';
+
+    HANDLE h = FindFirstFile((LPCWSTR)path_w.c_str(), &find);
     if(h != INVALID_HANDLE_VALUE)
     {
          do {
@@ -661,8 +692,8 @@ void enum_csv_dictionaries(std::string& path,
                  size_t i = sub_path.rfind(L".", sub_path.length());
                  if (i != std::string::npos)
                  {
-                     std::string extension = sub_path.substr(i + 1);
-                     if(extension.compare(L"csv" == 0))
+                     std::wstring extension = sub_path.substr(i + 1);
+					 if(_wcsicmp(extension.c_str(), L"csv") == 0)
                      {
                          C_TEXT p;
                          p.setUTF16String((const PA_Unichar *)sub_path.c_str(), sub_path.length());

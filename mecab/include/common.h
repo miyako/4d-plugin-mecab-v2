@@ -82,12 +82,8 @@
 #endif
 
 #ifdef _WIN32
-#ifdef __GNUC__
 #define WPATH_FORCE(path) (MeCab::Utf8ToWide(path).c_str())
-#define WPATH(path) (path)
-#else
 #define WPATH(path) WPATH_FORCE(path)
-#endif
 #else
 #define WPATH_FORCE(path) (path)
 #define WPATH(path) (path)
@@ -134,7 +130,12 @@ class wlog {
       __FILE__ << "(" << __LINE__ << ") [" << #condition << "] "
 
 #define CHECK_DIE(condition) \
-(condition) ? 0 : die() & std::cerr << __FILE__ << \
-"(" << __LINE__ << ") [" << #condition << "] "
+if(condition) \
+{}else \
+{ \
+    std::cerr << __FILE__ << \
+    "(" << __LINE__ << ") [" << #condition << "] "; \
+    throw std::exception(); \
+}
 
 #endif  // MECAB_COMMON_H_
