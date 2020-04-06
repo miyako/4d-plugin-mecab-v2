@@ -1,1 +1,31 @@
-﻿{"name":"MeCab","id":20000,"commands":[{"theme":"MeCab","syntax":"MeCab SET MODEL(&T)"},{"theme":"MeCab","syntax":"MeCab Get model:T"},{"theme":"MeCab","syntax":"MeCab(&T;&T):T"},{"theme":"MeCab Dictionary","syntax":"MeCab INDEX DICTIONARY(&T;&T)"},{"theme":"MeCab Dictionary","syntax":"MeCab GENERATE DICTIONARY(&T;&T)"}]}
+{
+    "name": "MeCab",
+    "id": 20000,
+    "commands": [
+        {
+            "theme": "MeCab",
+            "syntax": "MeCab SET MODEL(&T)",
+            "threadSafe": true
+        },
+        {
+            "theme": "MeCab",
+            "syntax": "MeCab Get model:T",
+            "threadSafe": true
+        },
+        {
+            "theme": "MeCab",
+            "syntax": "MeCab(&T;&T):T",
+            "threadSafe": true
+        },
+        {
+            "theme": "MeCab Dictionary",
+            "syntax": "MeCab INDEX DICTIONARY(&T;&T)",
+            "threadSafe": true
+        },
+        {
+            "theme": "MeCab Dictionary",
+            "syntax": "MeCab GENERATE DICTIONARY(&T;&T)",
+            "threadSafe": true
+        }
+    ]
+}

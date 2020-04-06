@@ -1,5 +1,5 @@
 /* Localized versions of Info.plist keys */
 
 CFBundleName = "MeCab";
-CFBundleShortVersionString = "2.1";
-CFBundleGetInfoString = "MeCab version 2.1, Copyright 2019 miyako.";
+CFBundleShortVersionString = "2.1.1";
+CFBundleGetInfoString = "MeCab version 2.1.1, Copyright 2020 miyako.";
