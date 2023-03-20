@@ -24,7 +24,7 @@
 
 下記のファイルをダウンロードしておき，スタートアップで``MeCab SET MODEL``を実行してください。
 
-サンプルプログラムのResourcesフォルダーには，これらのファイルが含まれています。  
+サンプルプログラムの[Resources](https://github.com/miyako/4d-plugin-mecab-v2/releases/download/2.2.0/Resources.zip)フォルダーには，これらのファイルが含まれています。  
 
 * [ipadic-utf8-compiled](https://github.com/miyako/4d-plugin-mecab-v2/releases/download/mecab-ipadic-utf8-compiled/ipadic.zip)
 
