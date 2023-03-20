@@ -1,0 +1,4 @@
+mecab/build/*
+**.DS_Store
+mecab/test/userPreferences.*
+mecab/test/Resources/*
