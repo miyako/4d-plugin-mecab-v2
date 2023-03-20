@@ -39,9 +39,15 @@
 
 #pragma mark -
 
+//    sLONG_PTR *pResult = (sLONG_PTR *)params->fResult;
+//    PackagePtr pParams = (PackagePtr)params->fParameters;
+
 static void MeCab_SET_MODEL(PA_PluginParameters params);
 static void MeCab_Get_model(PA_PluginParameters params);
+
 static void _MeCab(PA_PluginParameters params);
+
+// --- MeCab Dictionary
 static void MeCab_INDEX_DICTIONARY(PA_PluginParameters params);
 static void MeCab_GENERATE_DICTIONARY(PA_PluginParameters params);
 

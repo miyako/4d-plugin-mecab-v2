@@ -21,6 +21,10 @@
 		<data>
 		9zx9q1btdgQsX3BhlciGOaQjdDY=
 		</data>
+		<key>Resources/mecabrc</key>
+		<data>
+		rcg7GeeTSRscbqD9i0bNnzLlkvw=
+		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
@@ -54,11 +58,11 @@
 			LhGd7TDvrZQf6+g4Dk1UKokszabfNCIxX1SWVPlbk6A=
 			</data>
 		</dict>
-		<key>Windows/MeCab.4DX</key>
+		<key>Resources/mecabrc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			ZCCEqtPmUM+2iJDxTvuZrd5mchV7dH5Z4RZvNF7YQT0=
+			AbpHGcgLb+kRsJGnwFEktk7uzpZOCcBY74+YBdrKVGs=
 			</data>
 		</dict>
 		<key>Windows64/MeCab.4DX</key>
